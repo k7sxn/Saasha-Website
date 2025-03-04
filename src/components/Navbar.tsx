@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { Link } from 'react-router-dom';
 import { Menu, X } from 'lucide-react';
 
 const Navbar = () => {
@@ -10,14 +11,14 @@ const Navbar = () => {
         <div className="bg-saasha-cream/80 backdrop-blur-md rounded-2xl shadow-lg px-6 py-4">
           <div className="flex justify-between items-center">
             <div className="flex items-center">
-              <span className="text-2xl font-bold text-saasha-brown">Saasha</span>
+              <Link to="/" className="text-2xl font-bold text-saasha-brown">Saasha</Link>
             </div>
             
             <div className="hidden md:flex items-center space-x-8">
-              <NavLink text="Home" />
-              <NavLink text="About Us" />
-              <NavLink text="Team" />
-              <NavLink text="Contact" />
+              <NavLink to="/" text="Home" />
+              <NavLink to="/about" text="About Us" />
+              <NavLink to="/team" text="Team" />
+              <NavLink to="/contact" text="Contact" />
               <button className="bg-saasha-rose text-saasha-cream px-6 py-2 rounded-full hover:bg-saasha-brown transition-colors duration-300">
                 Register
               </button>
@@ -37,10 +38,10 @@ const Navbar = () => {
           {isOpen && (
             <div className="md:hidden mt-4 pt-4 border-t border-saasha-brown/10">
               <div className="flex flex-col space-y-4">
-                <MobileNavLink text="Home" />
-                <MobileNavLink text="About Us" />
-                <MobileNavLink text="Team" />
-                <MobileNavLink text="Contact" />
+                <MobileNavLink to="/" text="Home" />
+                <MobileNavLink to="/about" text="About Us" />
+                <MobileNavLink to="/team" text="Team" />
+                <MobileNavLink to="/contact" text="Contact" />
                 <button className="bg-saasha-rose text-saasha-cream px-6 py-2 rounded-full hover:bg-saasha-brown transition-colors duration-300 w-full">
                   Register
                 </button>
@@ -53,22 +54,22 @@ const Navbar = () => {
   );
 };
 
-const NavLink = ({ text }: { text: string }) => (
-  <a
-    href={`#${text.toLowerCase().replace(' ', '-')}`}
+const NavLink = ({ to, text }: { to: string; text: string }) => (
+  <Link
+    to={to}
     className="text-saasha-brown hover:text-saasha-rose transition-colors duration-300 font-medium"
   >
     {text}
-  </a>
+  </Link>
 );
 
-const MobileNavLink = ({ text }: { text: string }) => (
-  <a
-    href={`#${text.toLowerCase().replace(' ', '-')}`}
+const MobileNavLink = ({ to, text }: { to: string; text: string }) => (
+  <Link
+    to={to}
     className="text-saasha-brown hover:text-saasha-rose transition-colors duration-300 font-medium block w-full text-center"
   >
     {text}
-  </a>
+  </Link>
 );
 
 export default Navbar;
