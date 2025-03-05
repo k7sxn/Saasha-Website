@@ -71,17 +71,12 @@ const Contact = () => {
           <ContactCard
             icon={<Mail className="h-6 w-6" />}
             title="Email"
-            content="contact@saasha.org"
+            content="contact.foundationsaasha@gmail.com"
           />
           <ContactCard
-            icon={<Phone className="h-6 w-6" />}
-            title="Phone"
-            content="+1 (555) 123-4567"
-          />
-          <ContactCard
-            icon={<MapPin className="h-6 w-6" />}
-            title="Address"
-            content="123 Saasha Street, Cityville, ST 12345"
+            icon={<Mail className="h-6 w-6" />}
+            title="Email"
+            content="foundationsaasha@gmail.com"
           />
         </div>
 
