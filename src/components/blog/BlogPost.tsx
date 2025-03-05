@@ -59,11 +59,11 @@ const BlogPost = () => {
       <article className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         {/* Header Image */}
         {post.header_image && (
-          <div className="w-full h-[400px] mb-6 rounded-lg overflow-hidden">
+          <div className="w-full h-auto mb-6 rounded-lg overflow-hidden">
             <img
               src={post.header_image}
               alt={post.title}
-              className="w-full h-full object-cover"
+              className="w-full h-full"
             />
           </div>
         )}
