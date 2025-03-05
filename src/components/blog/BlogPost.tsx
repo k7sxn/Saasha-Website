@@ -59,7 +59,7 @@ const BlogPost = () => {
       <article className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         {/* Header Image */}
         {post.header_image && (
-          <div className="w-full h-[400px] mb-8 rounded-lg overflow-hidden">
+          <div className="w-full h-[400px] mb-6 rounded-lg overflow-hidden">
             <img
               src={post.header_image}
               alt={post.title}
@@ -69,7 +69,7 @@ const BlogPost = () => {
         )}
 
         {/* Meta Information Box */}
-        <div className="bg-saasha-cream/20 dark:bg-dark-secondary rounded-lg p-6 mb-4">
+        <div className="bg-saasha-cream/20 dark:bg-dark-secondary rounded-lg p-6 mb-2">
           <h1 className="text-4xl font-bold text-saasha-brown dark:text-dark-text mb-4">
             {post.title}
           </h1>
