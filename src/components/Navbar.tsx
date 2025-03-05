@@ -18,6 +18,7 @@ const Navbar = () => {
               <NavLink to="/" text="Home" />
               <NavLink to="/about" text="About Us" />
               <NavLink to="/team" text="Team" />
+              <NavLink to="/blogs" text="Blogs" />
               <NavLink to="/contact" text="Contact" />
               <Link 
                 to="/volunteer" 
@@ -44,13 +45,14 @@ const Navbar = () => {
                 <MobileNavLink to="/" text="Home" />
                 <MobileNavLink to="/about" text="About Us" />
                 <MobileNavLink to="/team" text="Team" />
+                <MobileNavLink to="/blogs" text="Blogs" />
                 <MobileNavLink to="/contact" text="Contact" />
-                <Link 
+                <MobileNavLink 
                   to="/volunteer" 
                   className="bg-saasha-rose text-saasha-cream px-6 py-2 rounded-full hover:bg-saasha-brown dark:hover:bg-dark-accent transition-colors duration-300 w-full text-center"
                 >
                   Volunteer
-                </Link>
+                </MobileNavLink>
               </div>
             </div>
           )}

@@ -1,6 +1,7 @@
 import React, { useState, FormEvent } from 'react';
 import { Mail, Phone, MapPin } from 'lucide-react';
 import toast, { Toaster } from 'react-hot-toast';
+import PageLayout from './layout/PageLayout';
 
 interface FormData {
   name: string;
@@ -59,76 +60,78 @@ const Contact = () => {
   };
 
   return (
-    <div className="bg-saasha-cream dark:bg-dark-primary py-24" id="contact">
-      <Toaster position="top-center" />
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="text-center">
-          <h2 className="text-3xl font-extrabold text-saasha-brown dark:text-dark-text sm:text-4xl">Get in Touch</h2>
-          <p className="mt-4 text-xl text-saasha-brown/70 dark:text-dark-text/70">We'd love to hear from you</p>
-        </div>
-
-        <div className="mt-20 grid grid-cols-1 gap-8 md:grid-cols-2">
-          <ContactCard
-            icon={<Mail className="h-6 w-6" />}
-            title="Email"
-            content="help.foundation.saasha@gmail.com"
-          />
-          <ContactCard
-            icon={<Mail className="h-6 w-6" />}
-            title="Email"
-            content="foundation.saasha@gmail.com"
-          />
-        </div>
-
-        <form onSubmit={handleSubmit} className="mt-16 max-w-xl mx-auto">
-          <div className="grid grid-cols-1 gap-6">
-            <div>
-              <label htmlFor="name" className="block text-sm font-medium text-saasha-brown dark:text-dark-text">Name</label>
-              <input 
-                type="text" 
-                id="name"
-                name="name"
-                value={formData.name}
-                onChange={handleChange}
-                required
-                className="mt-1 block w-full rounded-md border-saasha-rose/20 shadow-sm focus:border-saasha-rose focus:ring focus:ring-saasha-rose/20 bg-white dark:bg-dark-secondary dark:border-dark-accent/20 dark:text-dark-text dark:focus:border-dark-accent dark:focus:ring-dark-accent/20"
-              />
-            </div>
-            <div>
-              <label htmlFor="email" className="block text-sm font-medium text-saasha-brown dark:text-dark-text">Email</label>
-              <input 
-                type="email" 
-                id="email"
-                name="email"
-                value={formData.email}
-                onChange={handleChange}
-                required
-                className="mt-1 block w-full rounded-md border-saasha-rose/20 shadow-sm focus:border-saasha-rose focus:ring focus:ring-saasha-rose/20 bg-white dark:bg-dark-secondary dark:border-dark-accent/20 dark:text-dark-text dark:focus:border-dark-accent dark:focus:ring-dark-accent/20"
-              />
-            </div>
-            <div>
-              <label htmlFor="message" className="block text-sm font-medium text-saasha-brown dark:text-dark-text">Message</label>
-              <textarea 
-                id="message"
-                name="message"
-                value={formData.message}
-                onChange={handleChange}
-                required
-                rows={4} 
-                className="mt-1 block w-full rounded-md border-saasha-rose/20 shadow-sm focus:border-saasha-rose focus:ring focus:ring-saasha-rose/20 bg-white dark:bg-dark-secondary dark:border-dark-accent/20 dark:text-dark-text dark:focus:border-dark-accent dark:focus:ring-dark-accent/20"
-              ></textarea>
-            </div>
-            <button 
-              type="submit" 
-              disabled={isSubmitting}
-              className="bg-saasha-brown text-saasha-cream py-2 px-4 rounded-md hover:bg-saasha-rose dark:bg-dark-accent dark:hover:bg-saasha-rose transition-colors duration-300 disabled:opacity-50 disabled:cursor-not-allowed"
-            >
-              {isSubmitting ? 'Sending...' : 'Send Message'}
-            </button>
+    <PageLayout>
+      <div className="bg-saasha-cream dark:bg-dark-primary py-16" id="contact">
+        <Toaster position="top-center" />
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="text-center">
+            <h2 className="text-3xl font-extrabold text-saasha-brown dark:text-dark-text sm:text-4xl">Get in Touch</h2>
+            <p className="mt-4 text-xl text-saasha-brown/70 dark:text-dark-text/70">We'd love to hear from you</p>
           </div>
-        </form>
+
+          <div className="mt-20 grid grid-cols-1 gap-8 md:grid-cols-2">
+            <ContactCard
+              icon={<Mail className="h-6 w-6" />}
+              title="Email"
+              content="help.foundation.saasha@gmail.com"
+            />
+            <ContactCard
+              icon={<Mail className="h-6 w-6" />}
+              title="Email"
+              content="foundation.saasha@gmail.com"
+            />
+          </div>
+
+          <form onSubmit={handleSubmit} className="mt-16 max-w-xl mx-auto">
+            <div className="grid grid-cols-1 gap-6">
+              <div>
+                <label htmlFor="name" className="block text-sm font-medium text-saasha-brown dark:text-dark-text">Name</label>
+                <input 
+                  type="text" 
+                  id="name"
+                  name="name"
+                  value={formData.name}
+                  onChange={handleChange}
+                  required
+                  className="mt-1 block w-full rounded-md border-saasha-rose/20 shadow-sm focus:border-saasha-rose focus:ring focus:ring-saasha-rose/20 bg-white dark:bg-dark-secondary dark:border-dark-accent/20 dark:text-dark-text dark:focus:border-dark-accent dark:focus:ring-dark-accent/20"
+                />
+              </div>
+              <div>
+                <label htmlFor="email" className="block text-sm font-medium text-saasha-brown dark:text-dark-text">Email</label>
+                <input 
+                  type="email" 
+                  id="email"
+                  name="email"
+                  value={formData.email}
+                  onChange={handleChange}
+                  required
+                  className="mt-1 block w-full rounded-md border-saasha-rose/20 shadow-sm focus:border-saasha-rose focus:ring focus:ring-saasha-rose/20 bg-white dark:bg-dark-secondary dark:border-dark-accent/20 dark:text-dark-text dark:focus:border-dark-accent dark:focus:ring-dark-accent/20"
+                />
+              </div>
+              <div>
+                <label htmlFor="message" className="block text-sm font-medium text-saasha-brown dark:text-dark-text">Message</label>
+                <textarea 
+                  id="message"
+                  name="message"
+                  value={formData.message}
+                  onChange={handleChange}
+                  required
+                  rows={4} 
+                  className="mt-1 block w-full rounded-md border-saasha-rose/20 shadow-sm focus:border-saasha-rose focus:ring focus:ring-saasha-rose/20 bg-white dark:bg-dark-secondary dark:border-dark-accent/20 dark:text-dark-text dark:focus:border-dark-accent dark:focus:ring-dark-accent/20"
+                ></textarea>
+              </div>
+              <button 
+                type="submit" 
+                disabled={isSubmitting}
+                className="bg-saasha-brown text-saasha-cream py-2 px-4 rounded-md hover:bg-saasha-rose dark:bg-dark-accent dark:hover:bg-saasha-rose transition-colors duration-300 disabled:opacity-50 disabled:cursor-not-allowed"
+              >
+                {isSubmitting ? 'Sending...' : 'Send Message'}
+              </button>
+            </div>
+          </form>
+        </div>
       </div>
-    </div>
+    </PageLayout>
   );
 };
 

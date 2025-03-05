@@ -70,7 +70,7 @@ const MainApp = () => {
         <Route path="/volunteer" element={<Volunteer />} />
         <Route path="/donate" element={<Donate />} />
         <Route path="/whysupport" element={<WhySupport />} />
-        <Route path="/blog" element={<BlogList />} />
+        <Route path="/blogs" element={<BlogList />} />
         <Route path="/blog/:slug" element={<BlogPost />} />
         <Route path="/admin" element={<AdminLogin />} />
         <Route

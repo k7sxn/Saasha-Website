@@ -80,43 +80,33 @@ const AdminDashboard = () => {
     if (!file) return;
 
     try {
-      // Create the bucket if it doesn't exist
-      const { data: bucketData, error: bucketError } = await supabase
-        .storage
-        .getBucket('blog-images');
-
-      if (!bucketData) {
-        const { error: createError } = await supabase
-          .storage
-          .createBucket('blog-images', {
-            public: true,
-            allowedMimeTypes: ['image/*'],
-            fileSizeLimit: 5242880 // 5MB
-          });
-        if (createError) throw createError;
-      }
-
+      // Simple upload without bucket creation
       const fileExt = file.name.split('.').pop();
-      const fileName = `${Date.now()}-${Math.random().toString(36).substring(2)}.${fileExt}`;
-      const filePath = `${fileName}`;
+      const fileName = `${Date.now()}.${fileExt}`;
 
-      const { error: uploadError } = await supabase.storage
+      const { error: uploadError, data: uploadData } = await supabase.storage
         .from('blog-images')
-        .upload(filePath, file);
+        .upload(fileName, file, {
+          cacheControl: '3600',
+          upsert: false
+        });
 
-      if (uploadError) throw uploadError;
+      if (uploadError) {
+        console.error('Upload error:', uploadError);
+        throw uploadError;
+      }
 
       const { data: { publicUrl } } = supabase.storage
         .from('blog-images')
-        .getPublicUrl(filePath);
+        .getPublicUrl(fileName);
 
       setFormData(prev => ({
         ...prev,
         header_image: publicUrl
       }));
-    } catch (error) {
-      console.error('Error uploading image:', error);
-      alert('Error uploading image. Please try again.');
+    } catch (error: any) {
+      console.error('Error details:', error);
+      alert(`Error uploading image: ${error.message || 'Unknown error'}`);
     }
   };
 
