@@ -35,7 +35,7 @@ const Contact = () => {
           'Content-Type': 'application/json'
         },
         body: JSON.stringify({
-          access_key: 'e9ad37d0-3e5c-4a30-bb39-1b412bb0b102', // Get this from Web3Forms
+          access_key: '45a7a4ed-d026-46b6-a295-bbe7f5eeae6f', // Get this from Web3Forms
           name: formData.name,
           email: formData.email,
           message: formData.message
