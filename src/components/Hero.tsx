@@ -26,8 +26,8 @@ const Hero = () => {
               </a>
             </div>
             <div className="mt-3 rounded-md shadow sm:mt-0 sm:ml-3">
-              <a href="#volunteer" className="w-full flex items-center justify-center px-8 py-3 border border-transparent text-base font-medium rounded-md text-saasha-brown bg-white hover:bg-saasha-cream transition-colors duration-300 md:py-4 md:text-lg md:px-10">
-                Volunteer
+              <a href="/whysupport" className="w-full flex items-center justify-center px-8 py-3 border border-transparent text-base font-medium rounded-md text-saasha-brown bg-white hover:bg-saasha-cream transition-colors duration-300 md:py-4 md:text-lg md:px-10">
+                Why Support Us
               </a>
             </div>
           </div>
