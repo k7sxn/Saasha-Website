@@ -66,10 +66,8 @@ const BlogPostManager = () => {
   }
 
   return (
-    <div className="space-y-6">
-      <h2 className="text-2xl font-bold text-saasha-brown dark:text-dark-text mb-6">
-        Manage Blog Posts
-      </h2>
+    <div className="bg-white dark:bg-dark-secondary rounded-lg shadow p-6">
+      <h2 className="text-xl font-semibold mb-6 text-saasha-brown dark:text-dark-text">Manage Blog Posts</h2>
       <div className="overflow-x-auto">
         <table className="min-w-full divide-y divide-gray-200 dark:divide-gray-700">
           <thead className="bg-gray-50 dark:bg-dark-secondary">
