@@ -35,7 +35,7 @@ const Contact = () => {
           'Content-Type': 'application/json'
         },
         body: JSON.stringify({
-          access_key: '45a7a4ed-d026-46b6-a295-bbe7f5eeae6f', // Get this from Web3Forms
+          access_key: 'f5af0961-3131-4613-b30e-ba1e8cf7da1e', // Get this from Web3Forms
           name: formData.name,
           email: formData.email,
           message: formData.message
@@ -71,12 +71,12 @@ const Contact = () => {
           <ContactCard
             icon={<Mail className="h-6 w-6" />}
             title="Email"
-            content="contact.foundationsaasha@gmail.com"
+            content="help.foundation.saasha@gmail.com"
           />
           <ContactCard
             icon={<Mail className="h-6 w-6" />}
             title="Email"
-            content="foundationsaasha@gmail.com"
+            content="foundation.saasha@gmail.com"
           />
         </div>
 
