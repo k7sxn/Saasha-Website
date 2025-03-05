@@ -1,7 +1,7 @@
 import React from 'react';
 import { Heart, BookOpen } from 'lucide-react';
 
-const About = () => {
+const Volunteer = () => {
   return (
     <section className="py-24 bg-white">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -54,4 +54,4 @@ const About = () => {
   );
 };
 
-export default About;
+export default Volunteer;

@@ -5,7 +5,8 @@ import Hero from './components/Hero';
 import About from './components/About';
 import Contact from './components/Contact';
 import WhySupport from './components/WhySupport';
-import Testimonials from './components/Testimonials';
+import Team from './components/Team';
+import Volunteer from './components/Volunteer';
 import Footer from './components/Footer';
 
 function App() {
@@ -22,8 +23,9 @@ function App() {
             </>
           } />
           <Route path="/about" element={<About />} />
-          <Route path="/team" element={<Testimonials />} />
+          <Route path="/team" element={<Team />} />
           <Route path="/contact" element={<Contact />} />
+          <Route path="/volunteer" element={<Volunteer />} />
           <Route path="/whysupport" element={<WhySupport />} />
         </Routes>
         <Footer />
