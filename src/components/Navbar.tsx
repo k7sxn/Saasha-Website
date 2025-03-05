@@ -41,6 +41,7 @@ const Navbar = () => {
                 <MobileNavLink to="/" text="Home" />
                 <MobileNavLink to="/about" text="About Us" />
                 <MobileNavLink to="/team" text="Team" />
+                <MobileNavLink to="/whysupport" text="Why Support" />
                 <MobileNavLink to="/contact" text="Contact" />
                 <button className="bg-saasha-rose text-saasha-cream px-6 py-2 rounded-full hover:bg-saasha-brown transition-colors duration-300 w-full">
                   Register

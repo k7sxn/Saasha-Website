@@ -1,4 +1,5 @@
 import React from 'react';
+import { Link } from 'react-router-dom';
 
 const Hero = () => {
   return (
@@ -21,14 +22,14 @@ const Hero = () => {
           </p>
           <div className="mt-5 max-w-md mx-auto sm:flex sm:justify-center md:mt-8">
             <div className="rounded-md shadow">
-              <a href="#donate" className="w-full flex items-center justify-center px-8 py-3 border border-transparent text-base font-medium rounded-md text-saasha-cream bg-saasha-brown hover:bg-saasha-rose transition-colors duration-300 md:py-4 md:text-lg md:px-10">
+              <Link to="#donate" className="w-full flex items-center justify-center px-8 py-3 border border-transparent text-base font-medium rounded-md text-saasha-cream bg-saasha-brown hover:bg-saasha-rose transition-colors duration-300 md:py-4 md:text-lg md:px-10">
                 Donate Now
-              </a>
+              </Link>
             </div>
             <div className="mt-3 rounded-md shadow sm:mt-0 sm:ml-3">
-              <a href="/whysupport" className="w-full flex items-center justify-center px-8 py-3 border border-transparent text-base font-medium rounded-md text-saasha-brown bg-white hover:bg-saasha-cream transition-colors duration-300 md:py-4 md:text-lg md:px-10">
+              <Link to="/whysupport" className="w-full flex items-center justify-center px-8 py-3 border border-transparent text-base font-medium rounded-md text-saasha-brown bg-white hover:bg-saasha-cream transition-colors duration-300 md:py-4 md:text-lg md:px-10">
                 Why Support Us
-              </a>
+              </Link>
             </div>
           </div>
         </div>
