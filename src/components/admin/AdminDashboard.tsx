@@ -80,11 +80,27 @@ const AdminDashboard = () => {
     if (!file) return;
 
     try {
-      const fileExt = file.name.split('.').pop();
-      const fileName = `${Math.random()}.${fileExt}`;
-      const filePath = `blog-images/${fileName}`;
+      // Create the bucket if it doesn't exist
+      const { data: bucketData, error: bucketError } = await supabase
+        .storage
+        .getBucket('blog-images');
 
-      const { error: uploadError, data } = await supabase.storage
+      if (!bucketData) {
+        const { error: createError } = await supabase
+          .storage
+          .createBucket('blog-images', {
+            public: true,
+            allowedMimeTypes: ['image/*'],
+            fileSizeLimit: 5242880 // 5MB
+          });
+        if (createError) throw createError;
+      }
+
+      const fileExt = file.name.split('.').pop();
+      const fileName = `${Date.now()}-${Math.random().toString(36).substring(2)}.${fileExt}`;
+      const filePath = `${fileName}`;
+
+      const { error: uploadError } = await supabase.storage
         .from('blog-images')
         .upload(filePath, file);
 
@@ -100,6 +116,7 @@ const AdminDashboard = () => {
       }));
     } catch (error) {
       console.error('Error uploading image:', error);
+      alert('Error uploading image. Please try again.');
     }
   };
 

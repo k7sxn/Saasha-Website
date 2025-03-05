@@ -49,20 +49,6 @@ const MainApp = () => {
     }
   }, [location.search]);
 
-  // Mock blog data (replace with actual data from your backend)
-  const mockPosts = [
-    {
-      id: '1',
-      title: 'Our First Community Event',
-      content: '<p>Details about our first community event...</p>',
-      headerImage: 'https://example.com/image1.jpg',
-      tags: ['community', 'events'],
-      createdAt: new Date().toISOString(),
-      updatedAt: new Date().toISOString(),
-      slug: 'our-first-community-event'
-    }
-  ];
-
   if (!hasAccess) {
     return <ComingSoon />;
   }
@@ -84,8 +70,8 @@ const MainApp = () => {
         <Route path="/volunteer" element={<Volunteer />} />
         <Route path="/donate" element={<Donate />} />
         <Route path="/whysupport" element={<WhySupport />} />
-        <Route path="/blog" element={<BlogList posts={mockPosts} />} />
-        <Route path="/blog/:slug" element={<BlogPost post={mockPosts[0]} />} />
+        <Route path="/blog" element={<BlogList />} />
+        <Route path="/blog/:slug" element={<BlogPost />} />
         <Route path="/admin" element={<AdminLogin />} />
         <Route
           path="/admin/dashboard"
