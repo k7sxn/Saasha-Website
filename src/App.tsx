@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
-import { BrowserRouter as Router, Routes, Route, useLocation } from 'react-router-dom';
+import { BrowserRouter as Router, Routes, Route, useLocation, Navigate } from 'react-router-dom';
 import { DarkModeProvider } from './context/DarkModeContext';
+import { AuthProvider, useAuth } from './context/AuthContext';
 import Navbar from './components/Navbar';
 import Hero from './components/Hero';
 import About from './components/About';
@@ -12,10 +13,40 @@ import Footer from './components/Footer';
 import Donate from './components/Donate';
 import DarkModeToggle from './components/DarkModeToggle';
 import ComingSoon from './components/ComingSoon';
+import AdminLogin from './components/admin/AdminLogin';
+import AdminDashboard from './components/admin/AdminDashboard';
+import BlogList from './components/blog/BlogList';
+import BlogPost from './components/blog/BlogPost';
+
+// Protected Route component
+const ProtectedRoute: React.FC<{ children: React.ReactNode }> = ({ children }) => {
+  const { isAuthenticated } = useAuth();
+  const location = useLocation();
+
+  if (!isAuthenticated) {
+    return <Navigate to="/admin" state={{ from: location }} replace />;
+  }
+
+  return <>{children}</>;
+};
 
 const MainApp = () => {
   const location = useLocation();
   const isAdmin = location.search.includes('?admin');
+
+  // Mock blog data (replace with actual data from your backend)
+  const mockPosts = [
+    {
+      id: '1',
+      title: 'Our First Community Event',
+      content: '<p>Details about our first community event...</p>',
+      headerImage: 'https://example.com/image1.jpg',
+      tags: ['community', 'events'],
+      createdAt: new Date().toISOString(),
+      updatedAt: new Date().toISOString(),
+      slug: 'our-first-community-event'
+    }
+  ];
 
   if (!isAdmin) {
     return <ComingSoon />;
@@ -38,6 +69,17 @@ const MainApp = () => {
         <Route path="/volunteer" element={<Volunteer />} />
         <Route path="/donate" element={<Donate />} />
         <Route path="/whysupport" element={<WhySupport />} />
+        <Route path="/blog" element={<BlogList posts={mockPosts} />} />
+        <Route path="/blog/:slug" element={<BlogPost post={mockPosts[0]} />} />
+        <Route path="/admin" element={<AdminLogin />} />
+        <Route
+          path="/admin/dashboard"
+          element={
+            <ProtectedRoute>
+              <AdminDashboard />
+            </ProtectedRoute>
+          }
+        />
       </Routes>
       <Footer />
       <DarkModeToggle />
@@ -48,9 +90,11 @@ const MainApp = () => {
 function App() {
   return (
     <DarkModeProvider>
-      <Router>
-        <MainApp />
-      </Router>
+      <AuthProvider>
+        <Router>
+          <MainApp />
+        </Router>
+      </AuthProvider>
     </DarkModeProvider>
   );
 }

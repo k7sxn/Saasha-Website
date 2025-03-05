@@ -1,0 +1,60 @@
+import React from 'react';
+import { Link } from 'react-router-dom';
+import { BlogPost } from '../../types/blog';
+
+interface BlogListProps {
+  posts: BlogPost[];
+}
+
+const BlogList: React.FC<BlogListProps> = ({ posts }) => {
+  return (
+    <div className="py-12 px-4 sm:px-6 lg:px-8 bg-saasha-cream dark:bg-dark-primary">
+      <div className="max-w-7xl mx-auto">
+        <h1 className="text-4xl font-bold text-saasha-brown dark:text-dark-text mb-8">Our Blog</h1>
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+          {posts.map((post) => (
+            <Link
+              key={post.id}
+              to={`/blog/${post.slug}`}
+              className="group"
+            >
+              <div className="bg-white dark:bg-dark-secondary rounded-lg overflow-hidden shadow-lg transition-transform duration-300 group-hover:transform group-hover:scale-105">
+                <div className="aspect-w-16 aspect-h-9">
+                  <img
+                    src={post.headerImage}
+                    alt={post.title}
+                    className="object-cover w-full h-full"
+                  />
+                </div>
+                <div className="p-6">
+                  <h2 className="text-xl font-semibold text-saasha-brown dark:text-dark-text mb-2 group-hover:text-saasha-rose dark:group-hover:text-dark-accent">
+                    {post.title}
+                  </h2>
+                  <div className="flex flex-wrap gap-2 mb-4">
+                    {post.tags.map((tag, index) => (
+                      <span
+                        key={index}
+                        className="inline-block px-2 py-1 text-xs font-medium bg-saasha-rose/10 text-saasha-rose dark:bg-dark-accent/10 dark:text-dark-accent rounded-full"
+                      >
+                        {tag}
+                      </span>
+                    ))}
+                  </div>
+                  <p className="text-gray-600 dark:text-dark-text/70 text-sm">
+                    {new Date(post.createdAt).toLocaleDateString('en-US', {
+                      year: 'numeric',
+                      month: 'long',
+                      day: 'numeric'
+                    })}
+                  </p>
+                </div>
+              </div>
+            </Link>
+          ))}
+        </div>
+      </div>
+    </div>
+  );
+};
+
+export default BlogList;
