@@ -18,6 +18,7 @@ const Navbar = () => {
               <NavLink to="/" text="Home" />
               <NavLink to="/about" text="About Us" />
               <NavLink to="/team" text="Team" />
+              <NavLink to="/whysupport" text="Why Support" />
               <NavLink to="/contact" text="Contact" />
               <button className="bg-saasha-rose text-saasha-cream px-6 py-2 rounded-full hover:bg-saasha-brown transition-colors duration-300">
                 Volunteer
