@@ -8,6 +8,7 @@ import WhySupport from './components/WhySupport';
 import Team from './components/Team';
 import Volunteer from './components/Volunteer';
 import Footer from './components/Footer';
+import Donate from './components/Donate';
 
 function App() {
   return (
@@ -26,6 +27,7 @@ function App() {
           <Route path="/team" element={<Team />} />
           <Route path="/contact" element={<Contact />} />
           <Route path="/volunteer" element={<Volunteer />} />
+          <Route path="/donate" element={<Donate />} />
           <Route path="/whysupport" element={<WhySupport />} />
         </Routes>
         <Footer />
