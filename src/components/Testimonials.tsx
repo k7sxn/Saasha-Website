@@ -2,9 +2,9 @@ import React from 'react';
 
 const Testimonials = () => {
   return (
-    <div className="bg-white py-24">
+    <div className="bg-white dark:bg-dark-primary py-24">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <h2 className="text-3xl font-extrabold text-center text-saasha-brown sm:text-4xl">Impact Stories</h2>
+        <h2 className="text-3xl font-extrabold text-center text-saasha-brown dark:text-dark-text sm:text-4xl">Impact Stories</h2>
         <div className="mt-20 grid grid-cols-1 gap-8 lg:grid-cols-2">
           <TestimonialCard
             quote="Thanks to Saasha, I was able to complete my education and secure a better future for my family."
@@ -25,15 +25,15 @@ const Testimonials = () => {
 };
 
 const TestimonialCard = ({ quote, author, role, image }: { quote: string; author: string; role: string; image: string }) => (
-  <div className="bg-saasha-cream rounded-lg p-8">
+  <div className="bg-saasha-cream dark:bg-dark-secondary rounded-lg p-8">
     <div className="flex items-center mb-8">
       <img className="h-12 w-12 rounded-full object-cover" src={image} alt={author} />
       <div className="ml-4">
-        <div className="text-lg font-medium text-saasha-brown">{author}</div>
-        <div className="text-saasha-rose">{role}</div>
+        <div className="text-lg font-medium text-saasha-brown dark:text-dark-text">{author}</div>
+        <div className="text-saasha-rose dark:text-dark-accent">{role}</div>
       </div>
     </div>
-    <p className="text-saasha-brown/80 italic">"{quote}"</p>
+    <p className="text-saasha-brown/80 dark:text-dark-text/80 italic">"{quote}"</p>
   </div>
 );
 
