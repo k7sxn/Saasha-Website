@@ -32,7 +32,22 @@ const ProtectedRoute: React.FC<{ children: React.ReactNode }> = ({ children }) =
 
 const MainApp = () => {
   const location = useLocation();
-  const isAdmin = location.search.includes('?admin');
+  const [hasAccess, setHasAccess] = useState(false);
+
+  useEffect(() => {
+    // Check if user already has access
+    const storedAccess = localStorage.getItem('hasAccess');
+    
+    // If ?admin is in URL, grant access
+    if (location.search.includes('?admin')) {
+      localStorage.setItem('hasAccess', 'true');
+      setHasAccess(true);
+    } 
+    // If access was previously granted, maintain it
+    else if (storedAccess === 'true') {
+      setHasAccess(true);
+    }
+  }, [location.search]);
 
   // Mock blog data (replace with actual data from your backend)
   const mockPosts = [
@@ -48,7 +63,7 @@ const MainApp = () => {
     }
   ];
 
-  if (!isAdmin) {
+  if (!hasAccess) {
     return <ComingSoon />;
   }
 
