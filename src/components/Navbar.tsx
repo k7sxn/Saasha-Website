@@ -11,7 +11,7 @@ const Navbar = () => {
         <div className="bg-saasha-cream/80 backdrop-blur-md rounded-2xl shadow-lg px-6 py-4">
           <div className="flex justify-between items-center">
             <div className="flex items-center">
-              <Link to="/" className="text-2xl font-bold text-saasha-brown">Saasha</Link>
+              <Link to="/" className="text-2xl font-bold text-saasha-brown">saasha</Link>
             </div>
             
             <div className="hidden md:flex items-center space-x-8">
