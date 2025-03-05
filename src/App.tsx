@@ -17,6 +17,7 @@ import AdminLogin from './components/admin/AdminLogin';
 import AdminDashboard from './components/admin/AdminDashboard';
 import BlogList from './components/blog/BlogList';
 import BlogPost from './components/blog/BlogPost';
+import EditBlogPost from './components/admin/EditBlogPost';
 
 // Protected Route component
 const ProtectedRoute: React.FC<{ children: React.ReactNode }> = ({ children }) => {
@@ -92,6 +93,14 @@ const MainApp = () => {
           element={
             <ProtectedRoute>
               <AdminDashboard />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/admin/edit/:slug"
+          element={
+            <ProtectedRoute>
+              <EditBlogPost />
             </ProtectedRoute>
           }
         />
