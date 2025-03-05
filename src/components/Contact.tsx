@@ -1,6 +1,5 @@
-import React, { useState, FormEvent, useEffect } from 'react';
+import React, { useState, FormEvent } from 'react';
 import { Mail, Phone, MapPin } from 'lucide-react';
-import emailjs from '@emailjs/browser';
 import toast, { Toaster } from 'react-hot-toast';
 
 interface FormData {
@@ -10,11 +9,6 @@ interface FormData {
 }
 
 const Contact = () => {
-  useEffect(() => {
-    // Initialize EmailJS with your public key
-    emailjs.init("h5vuuYZowk_kn1gqv");
-  }, []);
-
   const [formData, setFormData] = useState<FormData>({
     name: '',
     email: '',
@@ -35,24 +29,30 @@ const Contact = () => {
     setIsSubmitting(true);
 
     try {
-      const result = await emailjs.send(
-        'service_dut5nux', // Your service ID
-        'template_71v2rn7', // Replace with your template ID
-        {
-          from_name: formData.name,
-          from_email: formData.email,
-          message: formData.message,
-          to_name: 'saasha foundation',
-        }
-      );
+      const response = await fetch('https://api.web3forms.com/submit', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+          access_key: 'e9ad37d0-3e5c-4a30-bb39-1b412bb0b102', // Get this from Web3Forms
+          name: formData.name,
+          email: formData.email,
+          message: formData.message
+        })
+      });
 
-      if (result.status === 200) {
+      const data = await response.json();
+
+      if (data.success) {
         toast.success('Message sent successfully!');
         setFormData({ name: '', email: '', message: '' });
+      } else {
+        throw new Error('Failed to send message');
       }
     } catch (error) {
       toast.error('Failed to send message. Please try again.');
-      console.error('Error sending email:', error);
+      console.error('Error sending message:', error);
     } finally {
       setIsSubmitting(false);
     }
