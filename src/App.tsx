@@ -3,6 +3,7 @@ import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import Navbar from './components/Navbar';
 import Hero from './components/Hero';
 import About from './components/About';
+import Contact from './components/Contact';
 import WhySupport from './components/WhySupport';
 import Footer from './components/Footer';
 
@@ -21,7 +22,7 @@ function App() {
           } />
           <Route path="/about" element={<About />} />
           <Route path="/team" element={<div>Team Page</div>} />
-          <Route path="/contact" element={<div>Contact Page</div>} />
+          <Route path="/contact" element={<Contact />} />
         </Routes>
         <Footer />
       </div>
