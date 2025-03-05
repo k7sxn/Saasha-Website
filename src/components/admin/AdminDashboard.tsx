@@ -80,25 +80,57 @@ const AdminDashboard = () => {
     if (!file) return;
 
     try {
-      // Simple upload without bucket creation
+      // Check file type
+      if (!file.type.startsWith('image/')) {
+        throw new Error('Please upload an image file');
+      }
+
+      // Check file size (5MB limit)
+      if (file.size > 5 * 1024 * 1024) {
+        throw new Error('File size must be less than 5MB');
+      }
+
       const fileExt = file.name.split('.').pop();
       const fileName = `${Date.now()}.${fileExt}`;
+      const filePath = `${fileName}`;
 
+      // First try to create the bucket if it doesn't exist
+      const { data: buckets } = await supabase
+        .storage
+        .listBuckets();
+
+      const blogBucket = buckets?.find(b => b.name === 'blog-images');
+      
+      if (!blogBucket) {
+        const { error: createError } = await supabase
+          .storage
+          .createBucket('blog-images', {
+            public: true,
+            fileSizeLimit: 5242880, // 5MB
+            allowedMimeTypes: ['image/*']
+          });
+          
+        if (createError) {
+          console.error('Error creating bucket:', createError);
+        }
+      }
+
+      // Upload the file
       const { error: uploadError, data: uploadData } = await supabase.storage
         .from('blog-images')
-        .upload(fileName, file, {
+        .upload(filePath, file, {
           cacheControl: '3600',
           upsert: false
         });
 
       if (uploadError) {
         console.error('Upload error:', uploadError);
-        throw uploadError;
+        throw new Error(uploadError.message);
       }
 
       const { data: { publicUrl } } = supabase.storage
         .from('blog-images')
-        .getPublicUrl(fileName);
+        .getPublicUrl(filePath);
 
       setFormData(prev => ({
         ...prev,
