@@ -1,4 +1,4 @@
-import React, { useState, FormEvent } from 'react';
+import React, { useState, FormEvent, useEffect } from 'react';
 import { Mail, Phone, MapPin } from 'lucide-react';
 import emailjs from '@emailjs/browser';
 import toast, { Toaster } from 'react-hot-toast';
@@ -10,6 +10,11 @@ interface FormData {
 }
 
 const Contact = () => {
+  useEffect(() => {
+    // Initialize EmailJS with your public key
+    emailjs.init("h5vuuYZowk_kn1gqv");
+  }, []);
+
   const [formData, setFormData] = useState<FormData>({
     name: '',
     email: '',
@@ -30,17 +35,15 @@ const Contact = () => {
     setIsSubmitting(true);
 
     try {
-      // Replace these with your actual EmailJS credentials
       const result = await emailjs.send(
-        'YOUR_SERVICE_ID',
-        'YOUR_TEMPLATE_ID',
+        'service_dut5nux', // Your service ID
+        'template_71v2rn7', // Replace with your template ID
         {
           from_name: formData.name,
           from_email: formData.email,
           message: formData.message,
-          to_name: 'Saasha Foundation',
-        },
-        'YOUR_PUBLIC_KEY'
+          to_name: 'saasha foundation',
+        }
       );
 
       if (result.status === 200) {
