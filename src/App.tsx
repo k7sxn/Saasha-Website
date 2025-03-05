@@ -71,6 +71,7 @@ const MainApp = () => {
         <Route path="/donate" element={<Donate />} />
         <Route path="/whysupport" element={<WhySupport />} />
         <Route path="/blogs" element={<BlogList />} />
+        <Route path="/blog" element={<Navigate to="/blogs" replace />} />
         <Route path="/blog/:slug" element={<BlogPost />} />
         <Route path="/admin" element={<AdminLogin />} />
         <Route

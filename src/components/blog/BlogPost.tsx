@@ -69,32 +69,32 @@ const BlogPost = () => {
         )}
 
         {/* Meta Information Box */}
-        <div className="bg-saasha-cream/20 dark:bg-dark-secondary rounded-lg p-6 mb-8">
+        <div className="bg-saasha-cream/20 dark:bg-dark-secondary rounded-lg p-6 mb-4">
           <h1 className="text-4xl font-bold text-saasha-brown dark:text-dark-text mb-4">
             {post.title}
           </h1>
           
-          <div className="flex flex-wrap gap-4 items-center text-sm text-saasha-brown/80 dark:text-dark-text/80">
-            <div className="bg-saasha-cream/30 dark:bg-dark-accent px-4 py-2 rounded-full">
-              {new Date(post.created_at!).toLocaleDateString('en-US', {
-                year: 'numeric',
-                month: 'long',
-                day: 'numeric'
-              })}
-            </div>
-            
+          <div className="space-y-3">
             {post.tags && post.tags.length > 0 && (
               <div className="flex flex-wrap gap-2">
                 {post.tags.map((tag, index) => (
                   <span
                     key={index}
-                    className="bg-saasha-cream/30 dark:bg-dark-accent px-3 py-1 rounded-full"
+                    className="bg-saasha-rose/20 dark:bg-dark-accent px-3 py-1 rounded-full text-sm text-saasha-brown dark:text-dark-text"
                   >
                     {tag}
                   </span>
                 ))}
               </div>
             )}
+            
+            <div className="bg-saasha-brown/10 dark:bg-dark-accent/50 px-4 py-2 rounded-full inline-block text-sm text-saasha-brown dark:text-dark-text/80">
+              {new Date(post.created_at!).toLocaleDateString('en-US', {
+                year: 'numeric',
+                month: 'long',
+                day: 'numeric'
+              })}
+            </div>
           </div>
         </div>
 
