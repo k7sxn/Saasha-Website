@@ -19,9 +19,12 @@ const Navbar = () => {
               <NavLink to="/about" text="About Us" />
               <NavLink to="/team" text="Team" />
               <NavLink to="/contact" text="Contact" />
-              <button className="bg-saasha-rose text-saasha-cream px-6 py-2 rounded-full hover:bg-saasha-brown dark:hover:bg-dark-accent transition-colors duration-300">
+              <Link 
+                to="/volunteer" 
+                className="bg-saasha-rose text-saasha-cream px-6 py-2 rounded-full hover:bg-saasha-brown dark:hover:bg-dark-accent transition-colors duration-300"
+              >
                 Volunteer
-              </button>
+              </Link>
             </div>
 
             <div className="md:hidden">
@@ -42,9 +45,12 @@ const Navbar = () => {
                 <MobileNavLink to="/about" text="About Us" />
                 <MobileNavLink to="/team" text="Team" />
                 <MobileNavLink to="/contact" text="Contact" />
-                <button className="bg-saasha-rose text-saasha-cream px-6 py-2 rounded-full hover:bg-saasha-brown dark:hover:bg-dark-accent transition-colors duration-300 w-full">
+                <Link 
+                  to="/volunteer" 
+                  className="bg-saasha-rose text-saasha-cream px-6 py-2 rounded-full hover:bg-saasha-brown dark:hover:bg-dark-accent transition-colors duration-300 w-full text-center"
+                >
                   Volunteer
-                </button>
+                </Link>
               </div>
             </div>
           )}

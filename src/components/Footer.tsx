@@ -1,4 +1,5 @@
 import React from 'react';
+import { Link } from 'react-router-dom';
 
 const Footer = () => {
   return (
@@ -9,45 +10,48 @@ const Footer = () => {
           <p className="text-lg text-saasha-cream/80 max-w-2xl mx-auto">
             We're here to assist you with any questions, support, or partnership inquiries - reach out to us today.
           </p>
-          <button className="mt-8 bg-saasha-rose hover:bg-saasha-rose/90 dark:bg-dark-accent dark:hover:bg-dark-accent/90 text-saasha-cream px-8 py-3 rounded-full transition-colors duration-300">
+          <Link 
+            to="/contact"
+            className="mt-8 inline-block bg-saasha-rose hover:bg-saasha-rose/90 dark:bg-dark-accent dark:hover:bg-dark-accent/90 text-saasha-cream px-8 py-3 rounded-full transition-colors duration-300"
+          >
             Contact Us
-          </button>
+          </Link>
         </div>
 
         <div className="grid grid-cols-2 md:grid-cols-4 gap-8 text-center">
           <div className="space-y-4">
             <h3 className="font-semibold text-xl mb-4">About</h3>
             <ul className="space-y-2">
-              <li><a href="#" className="hover:text-saasha-rose dark:hover:text-dark-accent transition-colors duration-300">Our Story</a></li>
-              <li><a href="#" className="hover:text-saasha-rose dark:hover:text-dark-accent transition-colors duration-300">Team</a></li>
-              <li><a href="#" className="hover:text-saasha-rose dark:hover:text-dark-accent transition-colors duration-300">Careers</a></li>
+              <li><Link to="/" className="hover:text-saasha-rose dark:hover:text-dark-accent transition-colors duration-300">Our Story</Link></li>
+              <li><Link to="/" className="hover:text-saasha-rose dark:hover:text-dark-accent transition-colors duration-300">Team</Link></li>
+              <li><Link to="/" className="hover:text-saasha-rose dark:hover:text-dark-accent transition-colors duration-300">Careers</Link></li>
             </ul>
           </div>
           
           <div className="space-y-4">
             <h3 className="font-semibold text-xl mb-4">Causes</h3>
             <ul className="space-y-2">
-              <li><a href="#" className="hover:text-saasha-rose dark:hover:text-dark-accent transition-colors duration-300">Education</a></li>
-              <li><a href="#" className="hover:text-saasha-rose dark:hover:text-dark-accent transition-colors duration-300">Healthcare</a></li>
-              <li><a href="#" className="hover:text-saasha-rose dark:hover:text-dark-accent transition-colors duration-300">Environment</a></li>
+              <li><Link to="/" className="hover:text-saasha-rose dark:hover:text-dark-accent transition-colors duration-300">Education</Link></li>
+              <li><Link to="/" className="hover:text-saasha-rose dark:hover:text-dark-accent transition-colors duration-300">Healthcare</Link></li>
+              <li><Link to="/" className="hover:text-saasha-rose dark:hover:text-dark-accent transition-colors duration-300">Environment</Link></li>
             </ul>
           </div>
           
           <div className="space-y-4">
             <h3 className="font-semibold text-xl mb-4">Events</h3>
             <ul className="space-y-2">
-              <li><a href="#" className="hover:text-saasha-rose dark:hover:text-dark-accent transition-colors duration-300">Upcoming</a></li>
-              <li><a href="#" className="hover:text-saasha-rose dark:hover:text-dark-accent transition-colors duration-300">Past Events</a></li>
-              <li><a href="#" className="hover:text-saasha-rose dark:hover:text-dark-accent transition-colors duration-300">Gallery</a></li>
+              <li><Link to="/" className="hover:text-saasha-rose dark:hover:text-dark-accent transition-colors duration-300">Upcoming</Link></li>
+              <li><Link to="/" className="hover:text-saasha-rose dark:hover:text-dark-accent transition-colors duration-300">Past Events</Link></li>
+              <li><Link to="/" className="hover:text-saasha-rose dark:hover:text-dark-accent transition-colors duration-300">Gallery</Link></li>
             </ul>
           </div>
           
           <div className="space-y-4">
             <h3 className="font-semibold text-xl mb-4">Contact</h3>
             <ul className="space-y-2">
-              <li><a href="#" className="hover:text-saasha-rose dark:hover:text-dark-accent transition-colors duration-300">Get in Touch</a></li>
-              <li><a href="#" className="hover:text-saasha-rose dark:hover:text-dark-accent transition-colors duration-300">Support</a></li>
-              <li><a href="#" className="hover:text-saasha-rose dark:hover:text-dark-accent transition-colors duration-300">FAQ</a></li>
+              <li><Link to="/contact" className="hover:text-saasha-rose dark:hover:text-dark-accent transition-colors duration-300">Get in Touch</Link></li>
+              <li><Link to="/contact" className="hover:text-saasha-rose dark:hover:text-dark-accent transition-colors duration-300">Support</Link></li>
+              <li><Link to="/contact" className="hover:text-saasha-rose dark:hover:text-dark-accent transition-colors duration-300">FAQ</Link></li>
             </ul>
           </div>
         </div>
