@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { BrowserRouter as Router, Routes, Route, useLocation, Navigate } from 'react-router-dom';
-import { DarkModeProvider } from './context/DarkModeContext';
+import { DarkModeProvider, useDarkMode } from './context/DarkModeContext';
 import { AuthProvider, useAuth } from './context/AuthContext';
 import Navbar from './components/Navbar';
 import Hero from './components/Hero';
@@ -34,6 +34,7 @@ const ProtectedRoute: React.FC<{ children: React.ReactNode }> = ({ children }) =
 const MainApp = () => {
   const location = useLocation();
   const [hasAccess, setHasAccess] = useState(false);
+  const { isDarkMode } = useDarkMode();
 
   useEffect(() => {
     // Check if user already has access
@@ -69,44 +70,46 @@ const MainApp = () => {
   }
 
   return (
-    <div className="min-h-screen bg-saasha-cream dark:bg-dark-primary dark:text-dark-text transition-colors duration-200">
-      <Navbar />
-      <Routes>
-        <Route path="/" element={
-          <>
-            <Hero />
-            <About />
-            <WhySupport />
-          </>
-        } />
-        <Route path="/about" element={<About />} />
-        <Route path="/team" element={<Team />} />
-        <Route path="/contact" element={<Contact />} />
-        <Route path="/volunteer" element={<Volunteer />} />
-        <Route path="/donate" element={<Donate />} />
-        <Route path="/whysupport" element={<WhySupport />} />
-        <Route path="/blog" element={<BlogList posts={mockPosts} />} />
-        <Route path="/blog/:slug" element={<BlogPost post={mockPosts[0]} />} />
-        <Route path="/admin" element={<AdminLogin />} />
-        <Route
-          path="/admin/dashboard"
-          element={
-            <ProtectedRoute>
-              <AdminDashboard />
-            </ProtectedRoute>
-          }
-        />
-        <Route
-          path="/admin/edit/:slug"
-          element={
-            <ProtectedRoute>
-              <EditBlogPost />
-            </ProtectedRoute>
-          }
-        />
-      </Routes>
-      <Footer />
-      <DarkModeToggle />
+    <div className={`min-h-screen bg-saasha-cream transition-colors duration-200 ${isDarkMode ? 'dark' : ''}`}>
+      <div className="min-h-screen bg-saasha-cream dark:bg-dark-primary dark:text-dark-text">
+        <Navbar />
+        <Routes>
+          <Route path="/" element={
+            <>
+              <Hero />
+              <About />
+              <WhySupport />
+            </>
+          } />
+          <Route path="/about" element={<About />} />
+          <Route path="/team" element={<Team />} />
+          <Route path="/contact" element={<Contact />} />
+          <Route path="/volunteer" element={<Volunteer />} />
+          <Route path="/donate" element={<Donate />} />
+          <Route path="/whysupport" element={<WhySupport />} />
+          <Route path="/blog" element={<BlogList posts={mockPosts} />} />
+          <Route path="/blog/:slug" element={<BlogPost post={mockPosts[0]} />} />
+          <Route path="/admin" element={<AdminLogin />} />
+          <Route
+            path="/admin/dashboard"
+            element={
+              <ProtectedRoute>
+                <AdminDashboard />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/admin/edit/:slug"
+            element={
+              <ProtectedRoute>
+                <EditBlogPost />
+              </ProtectedRoute>
+            }
+          />
+        </Routes>
+        <Footer />
+        <DarkModeToggle />
+      </div>
     </div>
   );
 };
