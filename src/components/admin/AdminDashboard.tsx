@@ -30,6 +30,21 @@ const AdminDashboard = () => {
   const [tagInput, setTagInput] = useState('');
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [showManager, setShowManager] = useState(true);
+  const [editingId, setEditingId] = useState<number | null>(null);
+
+  useEffect(() => {
+    const handleEditPost = (event: CustomEvent<BlogPost>) => {
+      const post = event.detail;
+      setFormData(post);
+      setEditingId(post.id!);
+      setShowManager(false);
+    };
+
+    window.addEventListener('editBlogPost', handleEditPost as EventListener);
+    return () => {
+      window.removeEventListener('editBlogPost', handleEditPost as EventListener);
+    };
+  }, []);
 
   useEffect(() => {
     // Load Cloudinary widget script
@@ -101,9 +116,20 @@ const AdminDashboard = () => {
 
     try {
       const slug = generateSlug(formData.title);
-      const { error } = await supabase
-        .from('blog_posts')
-        .insert([{ ...formData, slug }]);
+      let error;
+
+      if (editingId) {
+        // Update existing post
+        ({ error } = await supabase
+          .from('blog_posts')
+          .update({ ...formData, slug })
+          .eq('id', editingId));
+      } else {
+        // Create new post
+        ({ error } = await supabase
+          .from('blog_posts')
+          .insert([{ ...formData, slug }]));
+      }
 
       if (error) throw error;
 
@@ -115,10 +141,11 @@ const AdminDashboard = () => {
         tags: [],
         slug: '',
       });
+      setEditingId(null);
       setShowManager(true);
     } catch (error) {
-      console.error('Error creating post:', error);
-      alert('Failed to create blog post. Please try again.');
+      console.error('Error saving post:', error);
+      alert('Failed to save blog post. Please try again.');
     } finally {
       setIsSubmitting(false);
     }
@@ -150,7 +177,19 @@ const AdminDashboard = () => {
             <h1 className="text-3xl font-bold text-saasha-brown dark:text-dark-text">Admin Dashboard</h1>
             <div className="space-x-4">
               <button
-                onClick={() => setShowManager(!showManager)}
+                onClick={() => {
+                  if (!showManager) {
+                    setFormData({
+                      title: '',
+                      content: '',
+                      header_image: '',
+                      tags: [],
+                      slug: '',
+                    });
+                    setEditingId(null);
+                  }
+                  setShowManager(!showManager);
+                }}
                 className="bg-saasha-brown text-white px-4 py-2 rounded-md hover:bg-saasha-brown/90"
               >
                 {showManager ? 'Create New Post' : 'Manage Posts'}
@@ -171,7 +210,9 @@ const AdminDashboard = () => {
             <BlogPostManager />
           ) : (
             <div className="bg-white dark:bg-dark-secondary rounded-lg shadow p-6">
-              <h2 className="text-xl font-semibold mb-4 text-saasha-brown dark:text-dark-text">Create New Blog Post</h2>
+              <h2 className="text-xl font-semibold mb-4 text-saasha-brown dark:text-dark-text">
+                {editingId ? 'Edit Blog Post' : 'Create New Blog Post'}
+              </h2>
               <form onSubmit={handleSubmit} className="space-y-6">
                 <div>
                   <label className="block text-sm font-medium text-saasha-brown dark:text-dark-text mb-1">
@@ -254,7 +295,7 @@ const AdminDashboard = () => {
                   disabled={isSubmitting}
                   className="w-full bg-saasha-rose text-white py-2 px-4 rounded-md hover:bg-saasha-rose/90 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-saasha-rose disabled:opacity-50"
                 >
-                  {isSubmitting ? 'Publishing...' : 'Publish Blog Post'}
+                  {isSubmitting ? 'Publishing...' : editingId ? 'Save Changes' : 'Publish Blog Post'}
                 </button>
               </form>
             </div>
