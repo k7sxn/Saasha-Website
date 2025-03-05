@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../../context/AuthContext';
 import { supabase } from '../../lib/supabase';
@@ -8,6 +8,14 @@ import PageLayout from '../layout/PageLayout';
 import { Database } from '../../types/supabase';
 
 type BlogPost = Database['public']['Tables']['blog_posts']['Insert'];
+
+declare global {
+  interface Window {
+    cloudinary: any;
+  }
+}
+
+const CLOUDINARY_PRESET = 'saasha_blog'; // Create this in your Cloudinary dashboard
 
 const AdminDashboard = () => {
   const { logout } = useAuth();
@@ -22,6 +30,63 @@ const AdminDashboard = () => {
   const [tagInput, setTagInput] = useState('');
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [showManager, setShowManager] = useState(true);
+
+  useEffect(() => {
+    // Load Cloudinary widget script
+    const script = document.createElement('script');
+    script.src = 'https://upload-widget.cloudinary.com/global/all.js';
+    script.async = true;
+    document.body.appendChild(script);
+
+    return () => {
+      document.body.removeChild(script);
+    };
+  }, []);
+
+  const handleImageUpload = () => {
+    if (!window.cloudinary) {
+      alert('Image upload is initializing. Please try again in a moment.');
+      return;
+    }
+
+    const widget = window.cloudinary.createUploadWidget(
+      {
+        cloudName: 'saasha-foundation',
+        uploadPreset: CLOUDINARY_PRESET,
+        sources: ['local', 'url', 'camera'],
+        multiple: false,
+        maxFiles: 1,
+        maxFileSize: 5000000, // 5MB
+        styles: {
+          palette: {
+            window: '#FFFFFF',
+            windowBorder: '#90A0B3',
+            tabIcon: '#8C7662',
+            menuIcons: '#8C7662',
+            textDark: '#8C7662',
+            textLight: '#FFFFFF',
+            link: '#8C7662',
+            action: '#E4A988',
+            inactiveTabIcon: '#B3B3B3',
+            error: '#F44235',
+            inProgress: '#8C7662',
+            complete: '#20B832',
+            sourceBg: '#FFFFFF'
+          }
+        }
+      },
+      (error: any, result: any) => {
+        if (!error && result && result.event === 'success') {
+          setFormData(prev => ({
+            ...prev,
+            header_image: result.info.secure_url
+          }));
+        }
+      }
+    );
+
+    widget.open();
+  };
 
   const generateSlug = (title: string) => {
     return title
@@ -53,6 +118,7 @@ const AdminDashboard = () => {
       setShowManager(true);
     } catch (error) {
       console.error('Error creating post:', error);
+      alert('Failed to create blog post. Please try again.');
     } finally {
       setIsSubmitting(false);
     }
@@ -74,53 +140,6 @@ const AdminDashboard = () => {
       ...prev,
       tags: prev.tags?.filter(tag => tag !== tagToRemove) || []
     }));
-  };
-
-  const handleImageUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
-    const file = e.target.files?.[0];
-    if (!file) return;
-
-    try {
-      // Check file type
-      if (!file.type.startsWith('image/')) {
-        throw new Error('Please upload an image file');
-      }
-
-      // Check file size (5MB limit)
-      if (file.size > 5 * 1024 * 1024) {
-        throw new Error('File size must be less than 5MB');
-      }
-
-      const fileExt = file.name.split('.').pop();
-      const fileName = `${Math.random().toString(36).substring(2)}-${Date.now()}.${fileExt}`;
-      const filePath = `${fileName}`;
-
-      // Upload the file
-      const { error: uploadError, data: uploadData } = await supabase.storage
-        .from('blog-images')
-        .upload(filePath, file, {
-          cacheControl: '3600',
-          upsert: false,
-          contentType: file.type // Explicitly set the content type
-        });
-
-      if (uploadError) {
-        console.error('Upload error:', uploadError);
-        throw new Error(`Upload failed: ${uploadError.message}`);
-      }
-
-      const { data: { publicUrl } } = supabase.storage
-        .from('blog-images')
-        .getPublicUrl(filePath);
-
-      setFormData(prev => ({
-        ...prev,
-        header_image: publicUrl
-      }));
-    } catch (error: any) {
-      console.error('Error details:', error);
-      alert(`Error uploading image: ${error.message || 'Unknown error'}`);
-    }
   };
 
   return (
@@ -171,18 +190,21 @@ const AdminDashboard = () => {
                   <label className="block text-sm font-medium text-saasha-brown dark:text-dark-text mb-1">
                     Header Image
                   </label>
-                  <input
-                    type="file"
-                    accept="image/*"
-                    onChange={handleImageUpload}
-                    className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-saasha-rose focus:border-saasha-rose dark:bg-dark-primary dark:border-gray-600 dark:text-dark-text"
-                  />
+                  <button
+                    type="button"
+                    onClick={handleImageUpload}
+                    className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-saasha-rose focus:border-saasha-rose dark:bg-dark-primary dark:border-gray-600 dark:text-dark-text text-left"
+                  >
+                    {formData.header_image ? 'Change Image' : 'Upload Image'}
+                  </button>
                   {formData.header_image && (
-                    <img
-                      src={formData.header_image}
-                      alt="Header preview"
-                      className="mt-2 h-32 object-cover rounded"
-                    />
+                    <div className="mt-2">
+                      <img
+                        src={formData.header_image}
+                        alt="Header preview"
+                        className="h-32 object-cover rounded"
+                      />
+                    </div>
                   )}
                 </div>
 
