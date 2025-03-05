@@ -51,7 +51,7 @@ const AdminDashboard = () => {
 
     const widget = window.cloudinary.createUploadWidget(
       {
-        cloudName: 'saasha-foundation',
+        cloudName: 'daoicwuqc',
         uploadPreset: CLOUDINARY_PRESET,
         sources: ['local', 'url', 'camera'],
         multiple: false,
