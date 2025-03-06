@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
-import { supabase } from '../../lib/supabaseClient';
-import { Database } from '../../lib/database.types';
+import { supabase } from '../../lib/supabase';
+import { Database } from '../../types/supabase';
 import { Link } from 'react-router-dom';
 import PageLayout from '../layout/PageLayout';
 
@@ -112,7 +112,19 @@ const EventsPage = () => {
                       </div>
                     </div>
 
-                    <div className="text-gray-600 dark:text-gray-400 text-sm line-clamp-3 prose dark:prose-invert" 
+                    <div className="text-gray-600 dark:text-gray-400 text-sm line-clamp-3 prose prose-sm dark:prose-invert
+                      prose-headings:text-saasha-brown dark:prose-headings:text-dark-text
+                      prose-h1:text-lg prose-h1:font-bold
+                      prose-h2:text-base prose-h2:font-semibold
+                      prose-h3:text-sm prose-h3:font-medium
+                      prose-h4:text-sm
+                      prose-p:text-sm prose-p:text-gray-600 dark:prose-p:text-gray-400
+                      prose-a:text-saasha-rose hover:prose-a:text-saasha-rose/80
+                      prose-strong:text-saasha-brown dark:prose-strong:text-dark-text
+                      prose-ul:ml-4 prose-ul:list-disc prose-ul:list-outside
+                      prose-ol:ml-4 prose-ol:list-decimal prose-ol:list-outside
+                      prose-li:my-1 prose-li:text-gray-600 dark:prose-li:text-gray-400
+                      marker:text-gray-600 dark:marker:text-gray-400" 
                       dangerouslySetInnerHTML={{ __html: event.description || '' }} 
                     />
                   </div>

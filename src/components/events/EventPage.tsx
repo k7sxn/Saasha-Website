@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
-import { useParams } from 'react-router-dom';
-import { supabase } from '../../lib/supabaseClient';
-import { Database } from '../../lib/database.types';
+import { useParams, Link } from 'react-router-dom';
+import { supabase } from '../../lib/supabase';
+import { Database } from '../../types/supabase';
 import PageLayout from '../layout/PageLayout';
 
 type Event = Database['public']['Tables']['events']['Row'];
@@ -54,12 +54,12 @@ const EventPage = () => {
             <h1 className="text-2xl font-bold text-saasha-brown dark:text-dark-text mb-4">
               {error || 'Event not found'}
             </h1>
-            <a
-              href="/events"
+            <Link
+              to="/events"
               className="text-saasha-rose hover:text-saasha-rose/80"
             >
               Back to Events
-            </a>
+            </Link>
           </div>
         </div>
       </PageLayout>
@@ -116,15 +116,29 @@ const EventPage = () => {
                 <span>{event.location}</span>
               </div>
 
-              <div className="prose dark:prose-invert max-w-none" dangerouslySetInnerHTML={{ __html: event.description || '' }} />
+              <div className="prose prose-lg dark:prose-invert max-w-none
+                prose-headings:text-saasha-brown dark:prose-headings:text-dark-text
+                prose-h1:text-4xl prose-h1:font-bold
+                prose-h2:text-3xl prose-h2:font-semibold
+                prose-h3:text-2xl prose-h3:font-medium
+                prose-h4:text-xl
+                prose-p:text-base prose-p:text-gray-700 dark:prose-p:text-gray-300
+                prose-a:text-saasha-rose hover:prose-a:text-saasha-rose/80
+                prose-strong:text-saasha-brown dark:prose-strong:text-dark-text
+                prose-ul:ml-6 prose-ul:list-disc prose-ul:list-outside
+                prose-ol:ml-6 prose-ol:list-decimal prose-ol:list-outside
+                prose-li:my-2 prose-li:text-gray-700 dark:prose-li:text-gray-300
+                marker:text-gray-700 dark:marker:text-gray-300"
+                dangerouslySetInnerHTML={{ __html: event.description || '' }}
+              />
 
               <div className="mt-8 flex justify-center">
-                <a
-                  href="/events"
+                <Link
+                  to="/events"
                   className="text-saasha-rose hover:text-saasha-rose/80"
                 >
                   Back to Events
-                </a>
+                </Link>
               </div>
             </div>
           </div>
