@@ -143,6 +143,8 @@ const AdminDashboard = () => {
       });
       setEditingId(null);
       setShowManager(true);
+      // Scroll to top
+      window.scrollTo({ top: 0, behavior: 'smooth' });
     } catch (error) {
       console.error('Error saving post:', error);
       alert('Failed to save blog post. Please try again.');

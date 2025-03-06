@@ -101,7 +101,18 @@ const BlogPost = () => {
         {/* Content Box */}
         <div className="bg-white dark:bg-dark-secondary rounded-lg shadow-lg p-8">
           <div 
-            className="prose prose-lg dark:prose-invert prose-saasha max-w-none"
+            className="prose prose-lg dark:prose-invert max-w-none
+              prose-headings:text-saasha-brown dark:prose-headings:text-dark-text
+              prose-h1:text-4xl prose-h1:font-bold
+              prose-h2:text-3xl prose-h2:font-semibold
+              prose-h3:text-2xl prose-h3:font-medium
+              prose-h4:text-xl
+              prose-p:text-base prose-p:text-gray-700 dark:prose-p:text-gray-300
+              prose-a:text-saasha-rose hover:prose-a:text-saasha-rose/80
+              prose-strong:text-saasha-brown dark:prose-strong:text-dark-text
+              prose-ul:list-disc prose-ul:ml-4
+              prose-ol:list-decimal prose-ol:ml-4
+              prose-li:text-gray-700 dark:prose-li:text-gray-300"
             dangerouslySetInnerHTML={{ __html: post.content || '' }}
           />
         </div>
