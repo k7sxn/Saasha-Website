@@ -5,7 +5,7 @@ import RichTextEditor from './RichTextEditor';
 
 type Event = Database['public']['Tables']['events']['Row'];
 
-const CLOUDINARY_PRESET = 'saasha_blogs';
+const CLOUDINARY_PRESET = 'saasha_blog';
 
 const EventManager = () => {
   const [events, setEvents] = useState<Event[]>([]);
@@ -24,6 +24,7 @@ const EventManager = () => {
   const [filter, setFilter] = useState<'all' | 'upcoming' | 'ongoing' | 'completed'>('all');
   const [loading, setLoading] = useState(true);
   const [deletingId, setDeletingId] = useState<string | null>(null);
+  const [publishingId, setPublishingId] = useState<string | null>(null);
 
   useEffect(() => {
     fetchEvents();
@@ -146,6 +147,30 @@ const EventManager = () => {
       alert('Failed to delete event. Please try again.');
     } finally {
       setDeletingId(null);
+    }
+  };
+
+  const handlePublishToggle = async (event: Event) => {
+    try {
+      setPublishingId(event.id);
+      const { error } = await supabase
+        .from('events')
+        .update({ published: !event.published })
+        .eq('id', event.id);
+
+      if (error) throw error;
+      
+      // Update local state
+      setEvents(prev => 
+        prev.map(e => 
+          e.id === event.id ? { ...e, published: !e.published } : e
+        )
+      );
+    } catch (error) {
+      console.error('Error toggling event publish status:', error);
+      alert('Failed to update event publish status. Please try again.');
+    } finally {
+      setPublishingId(null);
     }
   };
 
@@ -289,20 +314,7 @@ const EventManager = () => {
             </button>
           </div>
 
-          <div className="flex items-center space-x-4">
-            <label className="flex items-center">
-              <input
-                type="checkbox"
-                checked={formData.published}
-                onChange={(e) => setFormData(prev => ({ ...prev, published: e.target.checked }))}
-                className="rounded text-saasha-rose focus:ring-saasha-rose"
-                disabled={isSubmitting}
-              />
-              <span className="ml-2 text-sm text-gray-700 dark:text-gray-300">
-                Publish Event
-              </span>
-            </label>
-
+          <div className="flex justify-end">
             <button
               type="submit"
               disabled={isSubmitting}
@@ -327,19 +339,19 @@ const EventManager = () => {
           <table className="min-w-full divide-y divide-gray-200 dark:divide-gray-700">
             <thead className="bg-gray-50 dark:bg-gray-800">
               <tr>
-                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">
+                <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">
                   Event
                 </th>
-                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">
+                <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">
                   Date
                 </th>
-                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">
+                <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">
                   Status
                 </th>
-                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">
+                <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">
                   Published
                 </th>
-                <th className="px-6 py-3 text-right text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">
+                <th scope="col" className="px-6 py-3 text-right text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">
                   Actions
                 </th>
               </tr>
@@ -392,17 +404,36 @@ const EventManager = () => {
                     <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500 dark:text-gray-400">
                       {event.published ? 'Yes' : 'No'}
                     </td>
-                    <td className="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
+                    <td className="px-6 py-4 whitespace-nowrap text-right text-sm font-medium space-x-4">
                       <button
                         onClick={() => handleEdit(event)}
-                        className="text-saasha-rose hover:text-saasha-rose/80 mr-4"
-                        disabled={deletingId === event.id}
+                        className="text-saasha-rose hover:text-saasha-rose/80"
+                        disabled={deletingId === event.id || publishingId === event.id}
                       >
                         Edit
                       </button>
                       <button
+                        onClick={() => handlePublishToggle(event)}
+                        disabled={deletingId === event.id || publishingId === event.id}
+                        className={`${
+                          event.published
+                            ? 'text-green-600 hover:text-green-900 dark:hover:text-green-400'
+                            : 'text-yellow-600 hover:text-yellow-900 dark:hover:text-yellow-400'
+                        } disabled:opacity-50 disabled:cursor-not-allowed`}
+                      >
+                        {publishingId === event.id ? (
+                          <span className="flex items-center">
+                            <svg className="animate-spin -ml-1 mr-1 h-4 w-4" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                              <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
+                              <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                            </svg>
+                            {event.published ? 'Unpublishing...' : 'Publishing...'}
+                          </span>
+                        ) : event.published ? 'Unpublish' : 'Publish'}
+                      </button>
+                      <button
                         onClick={() => handleDelete(event.id)}
-                        disabled={deletingId === event.id}
+                        disabled={deletingId === event.id || publishingId === event.id}
                         className="text-red-600 hover:text-red-900 dark:hover:text-red-400 disabled:opacity-50 disabled:cursor-not-allowed"
                       >
                         {deletingId === event.id ? (

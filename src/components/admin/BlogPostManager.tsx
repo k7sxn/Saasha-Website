@@ -50,7 +50,7 @@ const BlogPostManager = () => {
     }
   };
 
-  const togglePublish = async (post: BlogPost) => {
+  const handlePublishToggle = async (post: BlogPost) => {
     try {
       const { error } = await supabase
         .from('blog_posts')
@@ -132,12 +132,22 @@ const BlogPostManager = () => {
                         ))}
                       </div>
                     </td>
-                    <td className="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
+                    <td className="px-6 py-4 whitespace-nowrap text-right text-sm font-medium space-x-4">
                       <button
                         onClick={() => handleEdit(post)}
-                        className="text-saasha-rose hover:text-saasha-rose/80 mr-4"
+                        className="text-saasha-rose hover:text-saasha-rose/80"
                       >
                         Edit
+                      </button>
+                      <button
+                        onClick={() => handlePublishToggle(post)}
+                        className={`${
+                          post.published
+                            ? 'text-green-600 hover:text-green-900 dark:hover:text-green-400'
+                            : 'text-yellow-600 hover:text-yellow-900 dark:hover:text-yellow-400'
+                        }`}
+                      >
+                        {post.published ? 'Unpublish' : 'Publish'}
                       </button>
                       <button
                         onClick={() => handleDelete(post.id)}
