@@ -2,9 +2,10 @@ import React, { useState, useEffect } from 'react';
 import { supabase } from '../../lib/supabase';
 import { Database } from '../../types/supabase';
 import RichTextEditor from './RichTextEditor';
-import { uploadImage } from '@/lib/cloudinary';
 
 type Event = Database['public']['Tables']['events']['Row'];
+
+const CLOUDINARY_PRESET = 'saasha_blogs';
 
 const EventManager = () => {
   const [events, setEvents] = useState<Event[]>([]);
@@ -23,7 +24,6 @@ const EventManager = () => {
   const [filter, setFilter] = useState<'all' | 'upcoming' | 'ongoing' | 'completed'>('all');
   const [loading, setLoading] = useState(true);
   const [deletingId, setDeletingId] = useState<string | null>(null);
-  const [updatingId, setUpdatingId] = useState<string | null>(null);
 
   useEffect(() => {
     fetchEvents();
@@ -46,26 +46,32 @@ const EventManager = () => {
     }
   };
 
-  const handleImageUpload = async () => {
-    const input = document.createElement('input');
-    input.type = 'file';
-    input.accept = 'image/*';
-    input.onchange = async (e) => {
-      const file = (e.target as HTMLInputElement).files?.[0];
-      if (!file) return;
+  const handleImageUpload = () => {
+    if (!window.cloudinary) {
+      alert('Image upload is initializing. Please try again in a moment.');
+      return;
+    }
 
-      try {
-        setIsSubmitting(true);
-        const imageUrl = await uploadImage(file);
-        setFormData(prev => ({ ...prev, image: imageUrl }));
-      } catch (error) {
-        console.error('Error uploading image:', error);
-        alert('Failed to upload image. Please check your Cloudinary configuration and try again.');
-      } finally {
-        setIsSubmitting(false);
+    const widget = window.cloudinary.createUploadWidget(
+      {
+        cloudName: 'daoicwuqc',
+        uploadPreset: CLOUDINARY_PRESET,
+        sources: ['local', 'url', 'camera'],
+        multiple: false,
+        maxFiles: 1,
+        maxFileSize: 5000000, // 5MB
+      },
+      (error: any, result: any) => {
+        if (!error && result && result.event === 'success') {
+          setFormData(prev => ({
+            ...prev,
+            image: result.info.secure_url
+          }));
+        }
       }
-    };
-    input.click();
+    );
+
+    widget.open();
   };
 
   const generateSlug = (title: string) => {
@@ -77,27 +83,27 @@ const EventManager = () => {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (!formData.title || !formData.date || !formData.location) return;
+    setIsSubmitting(true);
 
     try {
-      setIsSubmitting(true);
-      const { error } = await supabase
-        .from('events')
-        .upsert({
-          id: editingId || undefined,
-          title: formData.title,
-          description: formData.description || '',
-          image: formData.image || '',
-          date: formData.date,
-          location: formData.location,
-          status: formData.status,
-          published: false, // Always set to false when creating/updating
-        });
+      const slug = generateSlug(formData.title!);
+      const eventData = { ...formData, slug };
+      let error;
+
+      if (editingId) {
+        ({ error } = await supabase
+          .from('events')
+          .update(eventData)
+          .eq('id', editingId));
+      } else {
+        ({ error } = await supabase
+          .from('events')
+          .insert([eventData]));
+      }
 
       if (error) throw error;
 
-      await fetchEvents();
-      setShowForm(false);
+      fetchEvents();
       setFormData({
         title: '',
         description: '',
@@ -108,6 +114,7 @@ const EventManager = () => {
         published: false,
       });
       setEditingId(null);
+      setShowForm(false);
     } catch (error) {
       console.error('Error saving event:', error);
       alert('Failed to save event. Please try again.');
@@ -139,24 +146,6 @@ const EventManager = () => {
       alert('Failed to delete event. Please try again.');
     } finally {
       setDeletingId(null);
-    }
-  };
-
-  const togglePublish = async (id: string, currentStatus: boolean) => {
-    try {
-      setUpdatingId(id);
-      const { error } = await supabase
-        .from('events')
-        .update({ published: !currentStatus })
-        .eq('id', id);
-
-      if (error) throw error;
-      fetchEvents();
-    } catch (error) {
-      console.error('Error toggling publish status:', error);
-      alert('Failed to update publish status. Please try again.');
-    } finally {
-      setUpdatingId(null);
     }
   };
 
@@ -301,6 +290,19 @@ const EventManager = () => {
           </div>
 
           <div className="flex items-center space-x-4">
+            <label className="flex items-center">
+              <input
+                type="checkbox"
+                checked={formData.published}
+                onChange={(e) => setFormData(prev => ({ ...prev, published: e.target.checked }))}
+                className="rounded text-saasha-rose focus:ring-saasha-rose"
+                disabled={isSubmitting}
+              />
+              <span className="ml-2 text-sm text-gray-700 dark:text-gray-300">
+                Publish Event
+              </span>
+            </label>
+
             <button
               type="submit"
               disabled={isSubmitting}
@@ -325,19 +327,19 @@ const EventManager = () => {
           <table className="min-w-full divide-y divide-gray-200 dark:divide-gray-700">
             <thead className="bg-gray-50 dark:bg-gray-800">
               <tr>
-                <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">
+                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">
                   Event
                 </th>
-                <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">
+                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">
                   Date
                 </th>
-                <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">
+                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">
                   Status
                 </th>
-                <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">
+                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">
                   Published
                 </th>
-                <th scope="col" className="px-6 py-3 text-right text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">
+                <th className="px-6 py-3 text-right text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">
                   Actions
                 </th>
               </tr>
@@ -392,30 +394,15 @@ const EventManager = () => {
                     </td>
                     <td className="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
                       <button
-                        onClick={() => togglePublish(event.id, event.published)}
-                        disabled={updatingId === event.id}
-                        className="text-saasha-rose hover:text-saasha-rose/80 mr-4 disabled:opacity-50 disabled:cursor-not-allowed"
-                      >
-                        {updatingId === event.id ? (
-                          <span className="flex items-center">
-                            <svg className="animate-spin -ml-1 mr-1 h-4 w-4" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
-                              <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
-                              <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
-                            </svg>
-                            Updating...
-                          </span>
-                        ) : event.published ? 'Unpublish' : 'Publish'}
-                      </button>
-                      <button
                         onClick={() => handleEdit(event)}
                         className="text-saasha-rose hover:text-saasha-rose/80 mr-4"
-                        disabled={updatingId === event.id || deletingId === event.id}
+                        disabled={deletingId === event.id}
                       >
                         Edit
                       </button>
                       <button
                         onClick={() => handleDelete(event.id)}
-                        disabled={updatingId === event.id || deletingId === event.id}
+                        disabled={deletingId === event.id}
                         className="text-red-600 hover:text-red-900 dark:hover:text-red-400 disabled:opacity-50 disabled:cursor-not-allowed"
                       >
                         {deletingId === event.id ? (
