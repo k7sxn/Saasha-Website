@@ -4,6 +4,8 @@ import { useAuth } from '../../context/AuthContext';
 import { supabase } from '../../lib/supabase';
 import RichTextEditor from './RichTextEditor';
 import BlogPostManager from './BlogPostManager';
+import EventManager from './EventManager';
+import VolunteerManager from './VolunteerManager';
 import PageLayout from '../layout/PageLayout';
 import { Database } from '../../types/supabase';
 
@@ -20,6 +22,7 @@ const CLOUDINARY_PRESET = 'saasha_blog'; // Create this in your Cloudinary dashb
 const AdminDashboard = () => {
   const { logout } = useAuth();
   const navigate = useNavigate();
+  const [activeTab, setActiveTab] = useState<'blogs' | 'events' | 'volunteers'>('blogs');
   const [formData, setFormData] = useState<BlogPost>({
     title: '',
     content: '',
@@ -174,134 +177,166 @@ const AdminDashboard = () => {
   return (
     <PageLayout>
       <div className="bg-gray-100 dark:bg-dark-primary">
-        <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
           <div className="flex justify-between items-center mb-8">
             <h1 className="text-3xl font-bold text-saasha-brown dark:text-dark-text">Admin Dashboard</h1>
-            <div className="space-x-4">
-              <button
-                onClick={() => {
-                  if (!showManager) {
-                    setFormData({
-                      title: '',
-                      content: '',
-                      header_image: '',
-                      tags: [],
-                      slug: '',
-                    });
-                    setEditingId(null);
-                  }
-                  setShowManager(!showManager);
-                }}
-                className="bg-saasha-brown text-white px-4 py-2 rounded-md hover:bg-saasha-brown/90"
-              >
-                {showManager ? 'Create New Post' : 'Manage Posts'}
-              </button>
-              <button
-                onClick={() => {
-                  logout();
-                  navigate('/admin');
-                }}
-                className="bg-saasha-rose text-white px-4 py-2 rounded-md hover:bg-saasha-rose/90"
-              >
-                Logout
-              </button>
-            </div>
+            <button
+              onClick={() => {
+                logout();
+                navigate('/admin');
+              }}
+              className="bg-saasha-brown text-white px-4 py-2 rounded-md hover:bg-saasha-brown/90"
+            >
+              Logout
+            </button>
           </div>
 
-          {showManager ? (
-            <BlogPostManager />
-          ) : (
-            <div className="bg-white dark:bg-dark-secondary rounded-lg shadow p-6">
-              <h2 className="text-xl font-semibold mb-4 text-saasha-brown dark:text-dark-text">
-                {editingId ? 'Edit Blog Post' : 'Create New Blog Post'}
-              </h2>
-              <form onSubmit={handleSubmit} className="space-y-6">
-                <div>
-                  <label className="block text-sm font-medium text-saasha-brown dark:text-dark-text mb-1">
-                    Title
-                  </label>
-                  <input
-                    type="text"
-                    required
-                    value={formData.title}
-                    onChange={(e) => setFormData({ ...formData, title: e.target.value })}
-                    className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-saasha-rose focus:border-saasha-rose dark:bg-dark-primary dark:border-gray-600 dark:text-dark-text"
-                  />
-                </div>
+          {/* Navigation Tabs */}
+          <div className="flex border-b border-gray-200 dark:border-gray-700 mb-8">
+            <button
+              onClick={() => setActiveTab('blogs')}
+              className={`px-4 py-2 -mb-px text-sm font-medium ${
+                activeTab === 'blogs'
+                  ? 'border-b-2 border-saasha-rose text-saasha-rose'
+                  : 'text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-300'
+              }`}
+            >
+              Blog Posts
+            </button>
+            <button
+              onClick={() => setActiveTab('events')}
+              className={`px-4 py-2 -mb-px text-sm font-medium ${
+                activeTab === 'events'
+                  ? 'border-b-2 border-saasha-rose text-saasha-rose'
+                  : 'text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-300'
+              }`}
+            >
+              Events
+            </button>
+            <button
+              onClick={() => setActiveTab('volunteers')}
+              className={`px-4 py-2 -mb-px text-sm font-medium ${
+                activeTab === 'volunteers'
+                  ? 'border-b-2 border-saasha-rose text-saasha-rose'
+                  : 'text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-300'
+              }`}
+            >
+              Volunteer Applications
+            </button>
+          </div>
 
-                <div>
-                  <label className="block text-sm font-medium text-saasha-brown dark:text-dark-text mb-1">
-                    Header Image
-                  </label>
-                  <button
-                    type="button"
-                    onClick={handleImageUpload}
-                    className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-saasha-rose focus:border-saasha-rose dark:bg-dark-primary dark:border-gray-600 dark:text-dark-text text-left"
-                  >
-                    {formData.header_image ? 'Change Image' : 'Upload Image'}
-                  </button>
-                  {formData.header_image && (
-                    <div className="mt-2">
-                      <img
-                        src={formData.header_image}
-                        alt="Header preview"
-                        className="h-32 object-cover rounded"
-                      />
-                    </div>
-                  )}
-                </div>
-
-                <div>
-                  <label className="block text-sm font-medium text-saasha-brown dark:text-dark-text mb-1">
-                    Tags (Press Enter to add)
-                  </label>
-                  <input
-                    type="text"
-                    value={tagInput}
-                    onChange={(e) => setTagInput(e.target.value)}
-                    onKeyDown={handleTagAdd}
-                    className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-saasha-rose focus:border-saasha-rose dark:bg-dark-primary dark:border-gray-600 dark:text-dark-text"
-                    placeholder="Enter tags..."
-                  />
-                  <div className="mt-2 flex flex-wrap gap-2">
-                    {formData.tags?.map((tag, index) => (
-                      <span
-                        key={index}
-                        className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-saasha-rose text-white"
+          {/* Content Area */}
+          <div className="bg-white dark:bg-dark-secondary rounded-lg shadow-lg p-6">
+            {activeTab === 'blogs' && (
+              <>
+                {showManager ? (
+                  <BlogPostManager />
+                ) : (
+                  <div className="space-y-6">
+                    <div className="flex justify-between items-center">
+                      <h2 className="text-2xl font-bold text-saasha-brown dark:text-dark-text">
+                        {editingId ? 'Edit Blog Post' : 'Create New Blog Post'}
+                      </h2>
+                      <button
+                        onClick={() => setShowManager(true)}
+                        className="text-saasha-brown dark:text-dark-text hover:text-saasha-rose"
                       >
-                        {tag}
+                        Back to Posts
+                      </button>
+                    </div>
+                    <form onSubmit={handleSubmit} className="space-y-6">
+                      <div>
+                        <label className="block text-sm font-medium text-saasha-brown dark:text-dark-text mb-1">
+                          Title
+                        </label>
+                        <input
+                          type="text"
+                          required
+                          value={formData.title}
+                          onChange={(e) => setFormData({ ...formData, title: e.target.value })}
+                          className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-saasha-rose focus:border-saasha-rose dark:bg-dark-primary dark:border-gray-600 dark:text-dark-text"
+                        />
+                      </div>
+
+                      <div>
+                        <label className="block text-sm font-medium text-saasha-brown dark:text-dark-text mb-1">
+                          Header Image
+                        </label>
                         <button
                           type="button"
-                          onClick={() => handleTagRemove(tag)}
-                          className="ml-1 hover:text-saasha-cream"
+                          onClick={handleImageUpload}
+                          className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-saasha-rose focus:border-saasha-rose dark:bg-dark-primary dark:border-gray-600 dark:text-dark-text text-left"
                         >
-                          ×
+                          {formData.header_image ? 'Change Image' : 'Upload Image'}
                         </button>
-                      </span>
-                    ))}
+                        {formData.header_image && (
+                          <div className="mt-2">
+                            <img
+                              src={formData.header_image}
+                              alt="Header preview"
+                              className="h-32 object-cover rounded"
+                            />
+                          </div>
+                        )}
+                      </div>
+
+                      <div>
+                        <label className="block text-sm font-medium text-saasha-brown dark:text-dark-text mb-1">
+                          Tags (Press Enter to add)
+                        </label>
+                        <input
+                          type="text"
+                          value={tagInput}
+                          onChange={(e) => setTagInput(e.target.value)}
+                          onKeyDown={handleTagAdd}
+                          className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-saasha-rose focus:border-saasha-rose dark:bg-dark-primary dark:border-gray-600 dark:text-dark-text"
+                          placeholder="Enter tags..."
+                        />
+                        <div className="mt-2 flex flex-wrap gap-2">
+                          {formData.tags?.map((tag, index) => (
+                            <span
+                              key={index}
+                              className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-saasha-rose text-white"
+                            >
+                              {tag}
+                              <button
+                                type="button"
+                                onClick={() => handleTagRemove(tag)}
+                                className="ml-1 hover:text-saasha-cream"
+                              >
+                                ×
+                              </button>
+                            </span>
+                          ))}
+                        </div>
+                      </div>
+
+                      <div>
+                        <label className="block text-sm font-medium text-saasha-brown dark:text-dark-text mb-1">
+                          Content
+                        </label>
+                        <RichTextEditor
+                          value={formData.content}
+                          onChange={(value) => setFormData({ ...formData, content: value })}
+                        />
+                      </div>
+
+                      <button
+                        type="submit"
+                        disabled={isSubmitting}
+                        className="w-full bg-saasha-rose text-white py-2 px-4 rounded-md hover:bg-saasha-rose/90 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-saasha-rose disabled:opacity-50"
+                      >
+                        {isSubmitting ? 'Publishing...' : editingId ? 'Save Changes' : 'Publish Blog Post'}
+                      </button>
+                    </form>
                   </div>
-                </div>
+                )}
+              </>
+            )}
 
-                <div>
-                  <label className="block text-sm font-medium text-saasha-brown dark:text-dark-text mb-1">
-                    Content
-                  </label>
-                  <RichTextEditor
-                    value={formData.content}
-                    onChange={(value) => setFormData({ ...formData, content: value })}
-                  />
-                </div>
-
-                <button
-                  type="submit"
-                  disabled={isSubmitting}
-                  className="w-full bg-saasha-rose text-white py-2 px-4 rounded-md hover:bg-saasha-rose/90 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-saasha-rose disabled:opacity-50"
-                >
-                  {isSubmitting ? 'Publishing...' : editingId ? 'Save Changes' : 'Publish Blog Post'}
-                </button>
-              </form>
-            </div>
-          )}
+            {activeTab === 'events' && <EventManager />}
+            {activeTab === 'volunteers' && <VolunteerManager />}
+          </div>
         </div>
       </div>
     </PageLayout>
