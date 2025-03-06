@@ -8,7 +8,6 @@ import About from './components/About';
 import Contact from './components/Contact';
 import WhySupport from './components/WhySupport';
 import Team from './components/Team';
-import Volunteer from './components/Volunteer';
 import Footer from './components/Footer';
 import Donate from './components/Donate';
 import DarkModeToggle from './components/DarkModeToggle';
@@ -17,6 +16,8 @@ import AdminLogin from './components/admin/AdminLogin';
 import AdminDashboard from './components/admin/AdminDashboard';
 import BlogList from './components/blog/BlogList';
 import BlogPost from './components/blog/BlogPost';
+import EventsPage from './components/events/EventsPage';
+import VolunteerPage from './components/volunteer/VolunteerPage';
 
 // Protected Route component
 const ProtectedRoute: React.FC<{ children: React.ReactNode }> = ({ children }) => {
@@ -67,7 +68,8 @@ const MainApp = () => {
         <Route path="/about" element={<About />} />
         <Route path="/team" element={<Team />} />
         <Route path="/contact" element={<Contact />} />
-        <Route path="/volunteer" element={<Volunteer />} />
+        <Route path="/volunteer" element={<VolunteerPage />} />
+        <Route path="/events" element={<EventsPage />} />
         <Route path="/donate" element={<Donate />} />
         <Route path="/whysupport" element={<WhySupport />} />
         <Route path="/blogs" element={<BlogList />} />

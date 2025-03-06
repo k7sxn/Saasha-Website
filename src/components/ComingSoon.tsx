@@ -10,13 +10,24 @@ const ComingSoon = () => {
   });
 
   useEffect(() => {
-    // Set launch date to 30 days from now
-    const launchDate = new Date();
-    launchDate.setDate(launchDate.getDate() + 26);
+    // Set launch date to April 6th, 2024 at 3 PM IST
+    const launchDate = new Date('2024-04-06T15:00:00+05:30');
 
     const timer = setInterval(() => {
       const now = new Date().getTime();
       const distance = launchDate.getTime() - now;
+
+      // If launch date has passed
+      if (distance < 0) {
+        clearInterval(timer);
+        setCountdown({
+          days: 0,
+          hours: 0,
+          minutes: 0,
+          seconds: 0
+        });
+        return;
+      }
 
       setCountdown({
         days: Math.floor(distance / (1000 * 60 * 60 * 24)),
@@ -48,7 +59,7 @@ const ComingSoon = () => {
         
         <p className="text-xl md:text-2xl text-white/80 mb-12">
           We're crafting something special to serve our community better.
-          <br />Stay tuned for our grand launch!
+          <br />Join us on April 6th at 3 PM for our grand launch!
         </p>
 
         <div className="flex flex-wrap justify-center gap-4 mb-12">
@@ -72,7 +83,7 @@ const ComingSoon = () => {
           </div>
 
           <div className="text-white/60">
-            <p> {new Date().getFullYear()} Saasha Foundation. All rights reserved.</p>
+            <p>{new Date().getFullYear()} Saasha Foundation. All rights reserved.</p>
           </div>
         </div>
       </div>
