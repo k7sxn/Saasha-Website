@@ -9,7 +9,7 @@ interface AuthContextType {
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
 
 // Predefined credentials (in a real app, these would be stored securely)
-const ADMIN_USERNAME = 'admin';
+const ADMIN_USERNAME = 'saasha';
 const ADMIN_PASSWORD = 'saasha@2024';
 
 export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
