@@ -110,9 +110,10 @@ const BlogPost = () => {
               prose-p:text-base prose-p:text-gray-700 dark:prose-p:text-gray-300
               prose-a:text-saasha-rose hover:prose-a:text-saasha-rose/80
               prose-strong:text-saasha-brown dark:prose-strong:text-dark-text
-              prose-ul:list-disc prose-ul:ml-4
-              prose-ol:list-decimal prose-ol:ml-4
-              prose-li:text-gray-700 dark:prose-li:text-gray-300"
+              prose-ul:ml-6 prose-ul:list-disc prose-ul:list-outside
+              prose-ol:ml-6 prose-ol:list-decimal prose-ol:list-outside
+              prose-li:my-2 prose-li:text-gray-700 dark:prose-li:text-gray-300
+              marker:text-gray-700 dark:marker:text-gray-300"
             dangerouslySetInnerHTML={{ __html: post.content || '' }}
           />
         </div>
