@@ -23,13 +23,9 @@
   }
 }
 
-/* Rich Text Editor Dark Mode Styles */
+/* Quill Editor Dark Mode */
 .dark .ql-toolbar {
-  @apply border-gray-600 bg-dark-secondary;
-}
-
-.dark .ql-toolbar button svg {
-  @apply stroke-gray-300 fill-gray-300;
+  @apply bg-dark-secondary border-gray-600;
 }
 
 .dark .ql-toolbar .ql-stroke {
@@ -46,6 +42,41 @@
 
 .dark .ql-toolbar .ql-picker-options {
   @apply bg-dark-secondary border-gray-600;
+}
+
+.dark .ql-toolbar button:hover .ql-stroke,
+.dark .ql-toolbar button.ql-active .ql-stroke {
+  @apply stroke-saasha-rose;
+}
+
+.dark .ql-toolbar button:hover .ql-fill,
+.dark .ql-toolbar button.ql-active .ql-fill {
+  @apply fill-saasha-rose;
+}
+
+.dark .ql-container {
+  @apply bg-dark-secondary border-gray-600;
+}
+
+.dark .ql-editor {
+  @apply text-gray-100;
+}
+
+.dark .ql-editor.ql-blank::before {
+  @apply text-gray-500;
+}
+
+/* Quill Editor Light Mode */
+.ql-toolbar {
+  @apply border-gray-300 rounded-t-md;
+}
+
+.ql-container {
+  @apply border-gray-300 rounded-b-md;
+}
+
+.ql-editor {
+  @apply text-gray-900 min-h-[200px];
 }
 
 /* Blog Post List Styles */

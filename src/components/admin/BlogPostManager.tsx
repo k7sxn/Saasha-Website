@@ -66,63 +66,92 @@ const BlogPostManager = () => {
     }
   };
 
-  if (loading) {
-    return <div>Loading...</div>;
-  }
-
   return (
-    <div className="bg-white dark:bg-dark-secondary rounded-lg shadow p-6">
-      <h2 className="text-xl font-semibold mb-6 text-saasha-brown dark:text-dark-text">Manage Blog Posts</h2>
-      <div className="overflow-x-auto">
-        <table className="min-w-full divide-y divide-gray-200 dark:divide-gray-700">
-          <thead className="bg-gray-50 dark:bg-dark-secondary">
-            <tr>
-              <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">Title</th>
-              <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">Date</th>
-              <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">Status</th>
-              <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">Actions</th>
-            </tr>
-          </thead>
-          <tbody className="bg-white dark:bg-dark-secondary divide-y divide-gray-200 dark:divide-gray-700">
-            {posts.map((post) => (
-              <tr key={post.id}>
-                <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900 dark:text-dark-text">{post.title}</td>
-                <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500 dark:text-gray-400">
-                  {new Date(post.created_at!).toLocaleDateString()}
-                </td>
-                <td className="px-6 py-4 whitespace-nowrap">
-                  <span className={`px-2 inline-flex text-xs leading-5 font-semibold rounded-full ${
-                    post.published 
-                      ? 'bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-200' 
-                      : 'bg-yellow-100 text-yellow-800 dark:bg-yellow-900 dark:text-yellow-200'
-                  }`}>
-                    {post.published ? 'Published' : 'Draft'}
-                  </span>
-                </td>
-                <td className="px-6 py-4 whitespace-nowrap text-sm font-medium space-x-2">
-                  <button
-                    onClick={() => togglePublish(post)}
-                    className="text-indigo-600 dark:text-indigo-400 hover:text-indigo-900 dark:hover:text-indigo-300"
-                  >
-                    {post.published ? 'Unpublish' : 'Publish'}
-                  </button>
-                  <button
-                    onClick={() => handleEdit(post)}
-                    className="text-saasha-rose hover:text-saasha-rose/90"
-                  >
-                    Edit
-                  </button>
-                  <button
-                    onClick={() => handleDelete(post.id!)}
-                    className="text-red-600 hover:text-red-900 ml-4"
-                  >
-                    Delete
-                  </button>
-                </td>
+    <div className="space-y-8">
+      <div className="bg-white dark:bg-dark-secondary rounded-lg shadow-lg">
+        <div className="overflow-x-auto">
+          <table className="min-w-full divide-y divide-gray-200 dark:divide-gray-700">
+            <thead className="bg-gray-50 dark:bg-gray-800">
+              <tr>
+                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">
+                  Title
+                </th>
+                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">
+                  Created
+                </th>
+                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">
+                  Tags
+                </th>
+                <th className="px-6 py-3 text-right text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">
+                  Actions
+                </th>
               </tr>
-            ))}
-          </tbody>
-        </table>
+            </thead>
+            <tbody className="bg-white dark:bg-dark-secondary divide-y divide-gray-200 dark:divide-gray-700">
+              {loading ? (
+                <tr>
+                  <td colSpan={4} className="px-6 py-4 text-center text-gray-500 dark:text-gray-400">
+                    Loading posts...
+                  </td>
+                </tr>
+              ) : posts.length === 0 ? (
+                <tr>
+                  <td colSpan={4} className="px-6 py-4 text-center text-gray-500 dark:text-gray-400">
+                    No blog posts found
+                  </td>
+                </tr>
+              ) : (
+                posts.map((post) => (
+                  <tr key={post.id}>
+                    <td className="px-6 py-4 whitespace-nowrap">
+                      <div className="flex items-center">
+                        {post.header_image && (
+                          <img
+                            src={post.header_image}
+                            alt={post.title}
+                            className="h-10 w-10 rounded-full object-cover mr-3"
+                          />
+                        )}
+                        <div className="text-sm font-medium text-gray-900 dark:text-gray-100">
+                          {post.title}
+                        </div>
+                      </div>
+                    </td>
+                    <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500 dark:text-gray-400">
+                      {new Date(post.created_at).toLocaleDateString()}
+                    </td>
+                    <td className="px-6 py-4">
+                      <div className="flex flex-wrap gap-2">
+                        {post.tags?.map((tag, index) => (
+                          <span
+                            key={index}
+                            className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-saasha-rose text-white"
+                          >
+                            {tag}
+                          </span>
+                        ))}
+                      </div>
+                    </td>
+                    <td className="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
+                      <button
+                        onClick={() => handleEdit(post)}
+                        className="text-saasha-rose hover:text-saasha-rose/80 mr-4"
+                      >
+                        Edit
+                      </button>
+                      <button
+                        onClick={() => handleDelete(post.id)}
+                        className="text-red-600 hover:text-red-900 dark:hover:text-red-400"
+                      >
+                        Delete
+                      </button>
+                    </td>
+                  </tr>
+                ))
+              )}
+            </tbody>
+          </table>
+        </div>
       </div>
     </div>
   );

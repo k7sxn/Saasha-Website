@@ -9,6 +9,8 @@ const VolunteerManager = () => {
   const [selectedApplication, setSelectedApplication] = useState<VolunteerRegistration | null>(null);
   const [loading, setLoading] = useState(true);
   const [filter, setFilter] = useState<'all' | 'pending' | 'approved' | 'rejected'>('all');
+  const [updatingId, setUpdatingId] = useState<string | null>(null);
+  const [updatingStatus, setUpdatingStatus] = useState<'approved' | 'rejected' | null>(null);
 
   useEffect(() => {
     fetchApplications();
@@ -32,6 +34,9 @@ const VolunteerManager = () => {
 
   const updateApplicationStatus = async (id: string, status: 'pending' | 'approved' | 'rejected') => {
     try {
+      setUpdatingId(id);
+      setUpdatingStatus(status as 'approved' | 'rejected');
+      
       const { error } = await supabase
         .from('volunteer_registrations')
         .update({ status })
@@ -52,6 +57,9 @@ const VolunteerManager = () => {
     } catch (error) {
       console.error('Error updating application status:', error);
       alert('Failed to update application status. Please try again.');
+    } finally {
+      setUpdatingId(null);
+      setUpdatingStatus(null);
     }
   };
 
@@ -67,7 +75,7 @@ const VolunteerManager = () => {
 
   return (
     <div className="space-y-8">
-      <div className="flex justify-between items-center">
+      <div className="flex justify-between items-center mb-6">
         <h2 className="text-2xl font-bold text-saasha-brown dark:text-dark-text">
           Volunteer Applications
         </h2>
@@ -89,7 +97,7 @@ const VolunteerManager = () => {
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
         {/* Applications List */}
         <div className="lg:col-span-2">
-          <div className="bg-white dark:bg-dark-secondary rounded-lg shadow-lg overflow-hidden">
+          <div className="bg-white dark:bg-dark-secondary rounded-lg shadow-lg">
             <div className="overflow-x-auto">
               <table className="min-w-full divide-y divide-gray-200 dark:divide-gray-700">
                 <thead className="bg-gray-50 dark:bg-gray-800">
@@ -168,7 +176,7 @@ const VolunteerManager = () => {
         {/* Application Details */}
         <div className="lg:col-span-1">
           {selectedApplication ? (
-            <div className="bg-white dark:bg-dark-secondary rounded-lg shadow-lg p-6 space-y-6">
+            <div className="bg-white dark:bg-dark-secondary rounded-lg shadow-lg p-8 space-y-6">
               <div className="flex justify-between items-start">
                 <h3 className="text-lg font-semibold text-gray-900 dark:text-gray-100">
                   Application Details
@@ -176,17 +184,33 @@ const VolunteerManager = () => {
                 <div className="flex space-x-2">
                   <button
                     onClick={() => updateApplicationStatus(selectedApplication.id, 'approved')}
-                    disabled={selectedApplication.status === 'approved'}
-                    className="px-3 py-1 text-sm rounded-md bg-green-100 text-green-800 hover:bg-green-200 dark:bg-green-900 dark:text-green-200 disabled:opacity-50"
+                    disabled={selectedApplication.status === 'approved' || updatingId === selectedApplication.id}
+                    className="px-3 py-1 text-sm rounded-md bg-green-100 text-green-800 hover:bg-green-200 dark:bg-green-900 dark:text-green-200 disabled:opacity-50 disabled:cursor-not-allowed"
                   >
-                    Approve
+                    {updatingId === selectedApplication.id && updatingStatus === 'approved' ? (
+                      <span className="flex items-center">
+                        <svg className="animate-spin -ml-1 mr-1 h-4 w-4" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                          <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
+                          <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                        </svg>
+                        Approving...
+                      </span>
+                    ) : 'Approve'}
                   </button>
                   <button
                     onClick={() => updateApplicationStatus(selectedApplication.id, 'rejected')}
-                    disabled={selectedApplication.status === 'rejected'}
-                    className="px-3 py-1 text-sm rounded-md bg-red-100 text-red-800 hover:bg-red-200 dark:bg-red-900 dark:text-red-200 disabled:opacity-50"
+                    disabled={selectedApplication.status === 'rejected' || updatingId === selectedApplication.id}
+                    className="px-3 py-1 text-sm rounded-md bg-red-100 text-red-800 hover:bg-red-200 dark:bg-red-900 dark:text-red-200 disabled:opacity-50 disabled:cursor-not-allowed"
                   >
-                    Reject
+                    {updatingId === selectedApplication.id && updatingStatus === 'rejected' ? (
+                      <span className="flex items-center">
+                        <svg className="animate-spin -ml-1 mr-1 h-4 w-4" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                          <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
+                          <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                        </svg>
+                        Rejecting...
+                      </span>
+                    ) : 'Reject'}
                   </button>
                 </div>
               </div>
@@ -257,7 +281,7 @@ const VolunteerManager = () => {
               </div>
             </div>
           ) : (
-            <div className="bg-white dark:bg-dark-secondary rounded-lg shadow-lg p-6 text-center text-gray-500 dark:text-gray-400">
+            <div className="bg-white dark:bg-dark-secondary rounded-lg shadow-lg p-8 text-center text-gray-500 dark:text-gray-400">
               Select an application to view details
             </div>
           )}
