@@ -2,7 +2,6 @@ import { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import { supabase } from '../../lib/supabaseClient';
 import { Database } from '../../lib/database.types';
-import parse from 'html-react-parser';
 import PageLayout from '../layout/PageLayout';
 
 type Event = Database['public']['Tables']['events']['Row'];
@@ -117,9 +116,7 @@ const EventPage = () => {
                 <span>{event.location}</span>
               </div>
 
-              <div className="prose dark:prose-invert max-w-none">
-                {parse(event.description || '')}
-              </div>
+              <div className="prose dark:prose-invert max-w-none" dangerouslySetInnerHTML={{ __html: event.description || '' }} />
 
               <div className="mt-8 flex justify-center">
                 <a

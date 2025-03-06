@@ -1,7 +1,6 @@
 import { useEffect, useState } from 'react';
 import { supabase } from '../../lib/supabaseClient';
 import { Database } from '../../lib/database.types';
-import parse from 'html-react-parser';
 import { Link } from 'react-router-dom';
 import PageLayout from '../layout/PageLayout';
 
@@ -113,9 +112,9 @@ const EventsPage = () => {
                       </div>
                     </div>
 
-                    <div className="text-gray-600 dark:text-gray-400 text-sm line-clamp-3 prose dark:prose-invert">
-                      {parse(event.description || '')}
-                    </div>
+                    <div className="text-gray-600 dark:text-gray-400 text-sm line-clamp-3 prose dark:prose-invert" 
+                      dangerouslySetInnerHTML={{ __html: event.description || '' }} 
+                    />
                   </div>
                 </Link>
               ))}
