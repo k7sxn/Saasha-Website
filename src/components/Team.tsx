@@ -1,74 +1,128 @@
-import React from 'react';
-import PageLayout from './layout/PageLayout';
-import { useLocation } from 'react-router-dom';
+import React, { useState, useEffect } from 'react';
+import { ChevronLeft, ChevronRight } from 'lucide-react';
 
 const Team = () => {
-  const location = useLocation();
-  const isHomePage = location.pathname === '/';
+  const [currentIndex, setCurrentIndex] = useState(0);
+  const [isAutoPlaying, setIsAutoPlaying] = useState(true);
 
   const teamMembers = [
-    { id: 1, name: 'Team Member 1', role: 'Co-Founder', imageUrl: 'PLACEHOLDER_1' },
-    { id: 2, name: 'Team Member 2', role: 'Co-Founder', imageUrl: 'PLACEHOLDER_2' },
-    { id: 3, name: 'Team Member 3', role: 'Medical Director', imageUrl: 'PLACEHOLDER_3' },
-    { id: 4, name: 'Team Member 4', role: 'Healthcare Specialist', imageUrl: 'PLACEHOLDER_4' },
-    { id: 5, name: 'Team Member 5', role: 'Education Lead', imageUrl: 'PLACEHOLDER_5' },
-    { id: 6, name: 'Team Member 6', role: 'Community Outreach', imageUrl: 'PLACEHOLDER_6' },
-    { id: 7, name: 'Team Member 7', role: 'Research Coordinator', imageUrl: 'PLACEHOLDER_7' },
-    { id: 8, name: 'Team Member 8', role: 'Program Manager', imageUrl: 'PLACEHOLDER_8' },
-    { id: 9, name: 'Team Member 9', role: 'Healthcare Advocate', imageUrl: 'PLACEHOLDER_9' },
-    { id: 10, name: 'Team Member 10', role: 'Medical Educator', imageUrl: 'PLACEHOLDER_10' },
-    { id: 11, name: 'Team Member 11', role: 'Operations Lead', imageUrl: 'PLACEHOLDER_11' },
-    { id: 12, name: 'Team Member 12', role: 'Technology Lead', imageUrl: 'PLACEHOLDER_12' }
+    { id: 1, name: 'Sarah Chen', role: 'Co-Founder', imageUrl: 'https://images.unsplash.com/photo-1494790108377-be9c29b29330?auto=format&fit=crop&q=80' },
+    { id: 2, name: 'Michael Park', role: 'Co-Founder', imageUrl: 'https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?auto=format&fit=crop&q=80' },
+    { id: 3, name: 'Emma Rodriguez', role: 'Social Media Manager', imageUrl: 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&q=80' },
+    { id: 4, name: 'Alex Wong', role: 'Lead Designer', imageUrl: 'https://images.unsplash.com/photo-1539571696357-5a69c17a67c6?auto=format&fit=crop&q=80' },
+    { id: 5, name: 'Julia Smith', role: 'UI/UX Designer', imageUrl: 'https://images.unsplash.com/photo-1517841905240-472988babdf9?auto=format&fit=crop&q=80' },
+    { id: 6, name: 'David Kim', role: 'Creative Strategist', imageUrl: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&q=80' },
+    { id: 7, name: 'Lisa Johnson', role: 'Creative Strategist', imageUrl: 'https://images.unsplash.com/photo-1438761681033-6461ffad8d80?auto=format&fit=crop&q=80' },
+    { id: 8, name: 'James Wilson', role: 'Content Writer', imageUrl: 'https://images.unsplash.com/photo-1500648767791-00dcc994a43e?auto=format&fit=crop&q=80' },
+    { id: 9, name: 'Maria Garcia', role: 'Content Writer', imageUrl: 'https://images.unsplash.com/photo-1524504388940-b1c1722653e1?auto=format&fit=crop&q=80' },
+    { id: 10, name: 'Tom Anderson', role: 'Event Manager', imageUrl: 'https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?auto=format&fit=crop&q=80' },
+    { id: 11, name: 'Ryan Lee', role: 'Photographer', imageUrl: 'https://images.unsplash.com/photo-1492562080023-ab3db95bfbce?auto=format&fit=crop&q=80' },
+    { id: 12, name: 'Sophie Taylor', role: 'Head of Content Creation', imageUrl: 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&q=80' }
   ];
 
-  return (
-    <PageLayout>
-      <section className={`bg-white dark:bg-dark-primary ${isHomePage ? '-mt-16' : ''}`}>
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
-          <div className="text-center mb-16">
-            <h1 className="text-4xl font-bold text-saasha-brown dark:text-dark-text mb-4">
-              Meet The Team
-            </h1>
-            <p className="text-xl text-saasha-brown/70 dark:text-dark-text/70">
-              Passionate individuals dedicated to making healthcare accessible
-            </p>
-          </div>
+  const itemsPerPage = {
+    desktop: 4,
+    tablet: 3,
+    mobile: 2
+  };
 
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8">
-            {teamMembers.map((member) => (
-              <div 
-                key={member.id} 
-                className="bg-saasha-cream/30 dark:bg-dark-secondary/30 rounded-xl p-6 text-center 
-                  transform transition duration-300 hover:scale-105 hover:shadow-lg
-                  dark:shadow-dark-accent/10"
-              >
-                <div className="mb-4 relative">
-                  {/* Replace 'PLACEHOLDER_X' with actual image URL when provided */}
-                  <img
-                    src="https://images.unsplash.com/photo-1494790108377-be9c29b29330?auto=format&fit=crop&q=80"
-                    alt={member.name}
-                    className="w-32 h-32 rounded-full mx-auto object-cover 
-                      ring-4 ring-saasha-rose/20 dark:ring-dark-accent/20"
-                  />
-                  <div className="absolute inset-0 flex items-center justify-center">
-                    <p className="bg-saasha-brown/80 dark:bg-dark-secondary/80 
-                      text-saasha-cream dark:text-dark-text px-2 py-1 rounded text-sm">
-                      Replace {member.imageUrl}
-                    </p>
+  useEffect(() => {
+    let interval: number;
+    if (isAutoPlaying) {
+      interval = window.setInterval(() => {
+        setCurrentIndex((prevIndex) => 
+          prevIndex === teamMembers.length - itemsPerPage.desktop ? 0 : prevIndex + 1
+        );
+      }, 3000);
+    }
+    return () => clearInterval(interval);
+  }, [isAutoPlaying, teamMembers.length]);
+
+  const nextSlide = () => {
+    setCurrentIndex((prevIndex) => 
+      prevIndex === teamMembers.length - itemsPerPage.desktop ? 0 : prevIndex + 1
+    );
+  };
+
+  const prevSlide = () => {
+    setCurrentIndex((prevIndex) => 
+      prevIndex === 0 ? teamMembers.length - itemsPerPage.desktop : prevIndex - 1
+    );
+  };
+
+  return (
+    <section className="py-24 bg-white" id="team">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div className="text-center mb-16">
+          <h2 className="text-4xl font-bold text-saasha-brown">Meet The Team</h2>
+        </div>
+
+        <div className="relative">
+          {/* Navigation Buttons */}
+          <button 
+            onClick={prevSlide}
+            className="absolute left-0 top-1/2 -translate-y-1/2 -translate-x-12 bg-saasha-brown text-saasha-cream p-2 rounded-full hover:bg-saasha-rose transition-colors duration-300 z-10"
+            onMouseEnter={() => setIsAutoPlaying(false)}
+            onMouseLeave={() => setIsAutoPlaying(true)}
+          >
+            <ChevronLeft className="w-6 h-6" />
+          </button>
+
+          <button 
+            onClick={nextSlide}
+            className="absolute right-0 top-1/2 -translate-y-1/2 translate-x-12 bg-saasha-brown text-saasha-cream p-2 rounded-full hover:bg-saasha-rose transition-colors duration-300 z-10"
+            onMouseEnter={() => setIsAutoPlaying(false)}
+            onMouseLeave={() => setIsAutoPlaying(true)}
+          >
+            <ChevronRight className="w-6 h-6" />
+          </button>
+
+          {/* Team Members Carousel */}
+          <div className="overflow-hidden">
+            <div 
+              className="flex transition-transform duration-500 ease-in-out"
+              style={{ transform: `translateX(-${currentIndex * (100 / itemsPerPage.desktop)}%)` }}
+            >
+              {teamMembers.map((member) => (
+                <div 
+                  key={member.id} 
+                  className="flex-none w-full sm:w-1/2 md:w-1/3 lg:w-1/4 px-4"
+                >
+                  <div className="bg-saasha-cream/30 rounded-xl p-6 text-center transform hover:scale-105 transition-transform duration-300">
+                    <div className="mb-4">
+                      <img
+                        src={member.imageUrl}
+                        alt={member.name}
+                        className="w-32 h-32 rounded-full mx-auto object-cover"
+                      />
+                    </div>
+                    <h3 className="text-xl font-semibold text-saasha-brown mb-2">{member.name}</h3>
+                    <p className="text-saasha-rose">{member.role}</p>
                   </div>
                 </div>
-                <h3 className="text-xl font-semibold text-saasha-brown dark:text-dark-text mb-2">
-                  {member.name}
-                </h3>
-                <p className="text-saasha-rose dark:text-saasha-rose/90 font-medium">
-                  {member.role}
-                </p>
-              </div>
+              ))}
+            </div>
+          </div>
+
+          {/* Dots Indicator */}
+          <div className="flex justify-center mt-8 space-x-2">
+            {Array.from({ length: Math.ceil(teamMembers.length / itemsPerPage.desktop) }).map((_, index) => (
+              <button
+                key={index}
+                className={`h-2 rounded-full transition-all duration-300 ${
+                  Math.floor(currentIndex / itemsPerPage.desktop) === index 
+                    ? 'w-8 bg-saasha-brown' 
+                    : 'w-2 bg-saasha-rose'
+                }`}
+                onClick={() => setCurrentIndex(index * itemsPerPage.desktop)}
+                onMouseEnter={() => setIsAutoPlaying(false)}
+                onMouseLeave={() => setIsAutoPlaying(true)}
+              />
             ))}
           </div>
         </div>
-      </section>
-    </PageLayout>
+      </div>
+    </section>
   );
 };
 
