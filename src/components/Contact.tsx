@@ -61,7 +61,7 @@ const Contact = () => {
 
   return (
     <PageLayout>
-      <div className="bg-saasha-cream dark:bg-dark-primary py-2" id="contact">
+      <div className="bg-saasha-cream dark:bg-dark-primary py-4" id="contact">
         <Toaster position="top-center" />
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center">

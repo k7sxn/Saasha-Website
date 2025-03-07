@@ -6,10 +6,14 @@ const About = () => {
   return (
     <PageLayout>
       <section className="bg-white dark:bg-dark-primary">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-2">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
             <div>
-              <h2 className="text-4xl font-bold text-saasha-brown dark:text-dark-text mb-8">About saasha</h2>
+              <div className="text-center mb-12">
+                <h1 className="text-4xl font-bold text-saasha-brown dark:text-dark-text mb-4">
+                  About saasha
+                </h1>
+              </div>
               <p className="text-lg text-saasha-brown/80 dark:text-dark-text/80 mb-8">
                 saasha was born from the shared vision of two aspiring medical students committed to making healthcare knowledge accessible and actionable. The name "Saasha" not only combines the founders' names but also rhymes with "Aasha," the Hindi word for hope, symbolizing our mission to inspire hope and empowerment through health education and advocacy.
               </p>
