@@ -1,21 +1,40 @@
 import React, { useState, useEffect } from 'react';
 import { supabase } from '../../lib/supabase';
 import RichTextEditor from './RichTextEditor';
-import type { FAQ } from '../../types/faq';
+import type { Database } from '../../types/supabase';
+
+type FAQ = Database['public']['Tables']['faqs']['Row'];
+type FAQInsert = Database['public']['Tables']['faqs']['Insert'];
+type FAQUpdate = Database['public']['Tables']['faqs']['Update'];
 
 const FAQManager = () => {
   const [faqs, setFaqs] = useState<FAQ[]>([]);
   const [loading, setLoading] = useState(true);
   const [editingId, setEditingId] = useState<number | null>(null);
-  const [formData, setFormData] = useState<FAQ>({
+  const [formData, setFormData] = useState<FAQInsert>({
     question: '',
     answer: '',
     order: 0
   });
+  const [notification, setNotification] = useState<{
+    message: string;
+    type: 'success' | 'error';
+  } | null>(null);
 
   useEffect(() => {
     fetchFAQs();
   }, []);
+
+  useEffect(() => {
+    if (notification) {
+      const timer = setTimeout(() => setNotification(null), 3000);
+      return () => clearTimeout(timer);
+    }
+  }, [notification]);
+
+  const showNotification = (message: string, type: 'success' | 'error') => {
+    setNotification({ message, type });
+  };
 
   const fetchFAQs = async () => {
     try {
@@ -28,6 +47,7 @@ const FAQManager = () => {
       setFaqs(data || []);
     } catch (error) {
       console.error('Error fetching FAQs:', error);
+      showNotification('Failed to fetch FAQs', 'error');
     } finally {
       setLoading(false);
     }
@@ -39,33 +59,63 @@ const FAQManager = () => {
 
     try {
       if (editingId) {
+        // Only send the fields that can be updated
+        const updateData: FAQUpdate = {
+          question: formData.question,
+          answer: formData.answer,
+          order: formData.order
+        };
+        
         const { error } = await supabase
           .from('faqs')
-          .update(formData)
+          .update(updateData)
           .eq('id', editingId);
-        if (error) throw error;
+          
+        if (error) {
+          console.error('Supabase update error:', error);
+          throw error;
+        }
+        showNotification('FAQ updated successfully', 'success');
       } else {
+        const insertData: FAQInsert = {
+          question: formData.question,
+          answer: formData.answer,
+          order: faqs.length
+        };
+
         const { error } = await supabase
           .from('faqs')
-          .insert([{ ...formData, order: faqs.length }]);
+          .insert([insertData]);
+
         if (error) throw error;
+        showNotification('FAQ published successfully', 'success');
       }
 
-      // Reset form
+      // Reset form and scroll to top
       setFormData({ question: '', answer: '', order: 0 });
       setEditingId(null);
+      window.scrollTo({ top: 0, behavior: 'smooth' });
       await fetchFAQs();
     } catch (error) {
       console.error('Error saving FAQ:', error);
-      alert('Failed to save FAQ. Please try again.');
+      showNotification(
+        `Failed to save FAQ: ${error instanceof Error ? error.message : 'Unknown error'}`,
+        'error'
+      );
     } finally {
       setLoading(false);
     }
   };
 
   const handleEdit = (faq: FAQ) => {
-    setFormData(faq);
-    setEditingId(faq.id!);
+    const editData: FAQInsert = {
+      question: faq.question,
+      answer: faq.answer,
+      order: faq.order
+    };
+    setFormData(editData);
+    setEditingId(faq.id);
+    window.scrollTo({ top: 0, behavior: 'smooth' });
   };
 
   const handleDelete = async (id: number) => {
@@ -79,28 +129,50 @@ const FAQManager = () => {
         .eq('id', id);
       
       if (error) throw error;
+      showNotification('FAQ deleted successfully', 'success');
       await fetchFAQs();
     } catch (error) {
       console.error('Error deleting FAQ:', error);
-      alert('Failed to delete FAQ. Please try again.');
+      showNotification('Failed to delete FAQ', 'error');
     } finally {
       setLoading(false);
     }
   };
 
-  const handleReorder = async (id: number, newOrder: number) => {
+  const handleReorder = async (id: number, direction: 'up' | 'down') => {
+    const currentIndex = faqs.findIndex(faq => faq.id === id);
+    const newIndex = direction === 'up' ? currentIndex - 1 : currentIndex + 1;
+    
+    if (newIndex < 0 || newIndex >= faqs.length) return;
+
     try {
       setLoading(true);
-      const { error } = await supabase
-        .from('faqs')
-        .update({ order: newOrder })
-        .eq('id', id);
       
-      if (error) throw error;
+      // Get the FAQ we're swapping with
+      const otherFaq = faqs[newIndex];
+      
+      // Update both FAQs with their new orders
+      const updates = [
+        supabase
+          .from('faqs')
+          .update({ order: otherFaq.order })
+          .eq('id', id),
+        supabase
+          .from('faqs')
+          .update({ order: faqs[currentIndex].order })
+          .eq('id', otherFaq.id)
+      ];
+      
+      const results = await Promise.all(updates);
+      if (results.some(result => result.error)) {
+        throw new Error('Failed to reorder FAQs');
+      }
+      
+      showNotification('FAQ reordered successfully', 'success');
       await fetchFAQs();
     } catch (error) {
       console.error('Error reordering FAQ:', error);
-      alert('Failed to reorder FAQ. Please try again.');
+      showNotification('Failed to reorder FAQ', 'error');
     } finally {
       setLoading(false);
     }
@@ -108,6 +180,18 @@ const FAQManager = () => {
 
   return (
     <div className="space-y-8">
+      {notification && (
+        <div
+          className={`fixed top-4 right-4 px-4 py-2 rounded-md shadow-lg z-50 transition-opacity duration-300 ${
+            notification.type === 'success'
+              ? 'bg-green-500 text-white'
+              : 'bg-red-500 text-white'
+          }`}
+        >
+          {notification.message}
+        </div>
+      )}
+
       <form onSubmit={handleSubmit} className="bg-white dark:bg-dark-secondary rounded-lg shadow p-6">
         <h2 className="text-xl font-semibold text-saasha-brown dark:text-dark-text mb-4">
           {editingId ? 'Edit FAQ' : 'Add New FAQ'}
@@ -189,7 +273,7 @@ const FAQManager = () => {
                   <div className="flex items-center space-x-2">
                     {index > 0 && (
                       <button
-                        onClick={() => handleReorder(faq.id!, index - 1)}
+                        onClick={() => handleReorder(faq.id!, 'up')}
                         className="p-1 text-gray-400 hover:text-gray-500"
                       >
                         ↑
@@ -197,7 +281,7 @@ const FAQManager = () => {
                     )}
                     {index < faqs.length - 1 && (
                       <button
-                        onClick={() => handleReorder(faq.id!, index + 1)}
+                        onClick={() => handleReorder(faq.id!, 'down')}
                         className="p-1 text-gray-400 hover:text-gray-500"
                       >
                         ↓
