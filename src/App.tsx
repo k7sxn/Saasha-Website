@@ -19,6 +19,7 @@ import BlogPost from './components/blog/BlogPost';
 import EventsPage from './components/events/EventsPage';
 import EventPage from './components/events/EventPage';
 import VolunteerPage from './components/volunteer/VolunteerPage';
+import FAQ from './components/faq/FAQ';
 
 // Protected Route component
 const ProtectedRoute: React.FC<{ children: React.ReactNode }> = ({ children }) => {
@@ -77,6 +78,7 @@ const MainApp = () => {
         <Route path="/blogs" element={<BlogList />} />
         <Route path="/blog" element={<Navigate to="/blogs" replace />} />
         <Route path="/blog/:slug" element={<BlogPost />} />
+        <Route path="/faq" element={<FAQ />} />
         <Route path="/admin" element={<AdminLogin />} />
         <Route
           path="/admin/dashboard"

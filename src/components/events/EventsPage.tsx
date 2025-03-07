@@ -1,27 +1,49 @@
 import { useEffect, useState } from 'react';
 import { supabase } from '../../lib/supabase';
 import { Database } from '../../types/supabase';
-import { Link } from 'react-router-dom';
+import { Link, useSearchParams } from 'react-router-dom';
 import PageLayout from '../layout/PageLayout';
+import { ImageIcon } from 'lucide-react';
 
 type Event = Database['public']['Tables']['events']['Row'];
 
 const EventsPage = () => {
+  const [searchParams, setSearchParams] = useSearchParams();
   const [events, setEvents] = useState<Event[]>([]);
   const [loading, setLoading] = useState(true);
+  const [filter, setFilter] = useState(searchParams.get('filter') || 'all');
+  const [view, setView] = useState(searchParams.get('view') || 'list');
 
   useEffect(() => {
     fetchEvents();
-  }, []);
+  }, [filter]);
+
+  useEffect(() => {
+    setSearchParams(params => {
+      if (filter !== 'all') params.set('filter', filter);
+      else params.delete('filter');
+      if (view !== 'list') params.set('view', view);
+      else params.delete('view');
+      return params;
+    });
+  }, [filter, view, setSearchParams]);
 
   const fetchEvents = async () => {
     try {
       setLoading(true);
-      const { data, error } = await supabase
+      const now = new Date().toISOString();
+      let query = supabase
         .from('events')
         .select('*')
-        .eq('published', true)
-        .order('date', { ascending: true });
+        .eq('published', true);
+
+      if (filter === 'upcoming') {
+        query = query.gte('date', now);
+      } else if (filter === 'past') {
+        query = query.lt('date', now);
+      }
+
+      const { data, error } = await query.order('date', { ascending: filter !== 'past' });
 
       if (error) throw error;
       setEvents(data || []);
@@ -50,14 +72,106 @@ const EventsPage = () => {
             <h1 className="text-4xl font-bold text-saasha-brown dark:text-dark-text mb-4">
               Our Events
             </h1>
-            <p className="text-lg text-gray-600 dark:text-gray-300">
+            <p className="text-lg text-gray-600 dark:text-gray-300 mb-8">
               Join us in making a difference through our various events and initiatives
             </p>
+
+            <div className="flex justify-center space-x-4 mb-8">
+              <button
+                onClick={() => setFilter('all')}
+                className={`px-4 py-2 rounded-lg transition-colors duration-300 ${
+                  filter === 'all'
+                    ? 'bg-saasha-rose text-white'
+                    : 'bg-white dark:bg-dark-secondary text-gray-600 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-dark-secondary/80'
+                }`}
+              >
+                All Events
+              </button>
+              <button
+                onClick={() => setFilter('upcoming')}
+                className={`px-4 py-2 rounded-lg transition-colors duration-300 ${
+                  filter === 'upcoming'
+                    ? 'bg-saasha-rose text-white'
+                    : 'bg-white dark:bg-dark-secondary text-gray-600 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-dark-secondary/80'
+                }`}
+              >
+                Upcoming
+              </button>
+              <button
+                onClick={() => setFilter('past')}
+                className={`px-4 py-2 rounded-lg transition-colors duration-300 ${
+                  filter === 'past'
+                    ? 'bg-saasha-rose text-white'
+                    : 'bg-white dark:bg-dark-secondary text-gray-600 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-dark-secondary/80'
+                }`}
+              >
+                Past Events
+              </button>
+            </div>
+
+            <div className="flex justify-center space-x-4 mb-8">
+              <button
+                onClick={() => setView('list')}
+                className={`px-4 py-2 rounded-lg transition-colors duration-300 ${
+                  view === 'list'
+                    ? 'bg-saasha-rose text-white'
+                    : 'bg-white dark:bg-dark-secondary text-gray-600 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-dark-secondary/80'
+                }`}
+              >
+                List View
+              </button>
+              <button
+                onClick={() => setView('gallery')}
+                className={`px-4 py-2 rounded-lg transition-colors duration-300 ${
+                  view === 'gallery'
+                    ? 'bg-saasha-rose text-white'
+                    : 'bg-white dark:bg-dark-secondary text-gray-600 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-dark-secondary/80'
+                }`}
+              >
+                Gallery View
+              </button>
+            </div>
           </div>
 
           {events.length === 0 ? (
             <div className="text-center text-gray-600 dark:text-gray-400">
-              No upcoming events at the moment.
+              No {filter === 'upcoming' ? 'upcoming' : filter === 'past' ? 'past' : ''} events at the moment.
+            </div>
+          ) : view === 'gallery' ? (
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+              {events.map((event) => (
+                <Link
+                  key={event.id}
+                  to={`/event/${event.id}`}
+                  className="group relative aspect-square bg-gray-100 dark:bg-dark-secondary rounded-lg overflow-hidden transform transition duration-300 hover:scale-105"
+                >
+                  {event.image ? (
+                    <img
+                      src={event.image}
+                      alt={event.title}
+                      className="w-full h-full object-cover"
+                    />
+                  ) : (
+                    <div className="w-full h-full flex items-center justify-center">
+                      <ImageIcon className="w-12 h-12 text-gray-400" />
+                    </div>
+                  )}
+                  <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+                    <div className="absolute bottom-0 left-0 right-0 p-4">
+                      <h3 className="text-white text-lg font-semibold mb-2">
+                        {event.title}
+                      </h3>
+                      <p className="text-white/80 text-sm">
+                        {new Date(event.date).toLocaleDateString('en-US', {
+                          month: 'short',
+                          day: 'numeric',
+                          year: 'numeric'
+                        })}
+                      </p>
+                    </div>
+                  </div>
+                </Link>
+              ))}
             </div>
           ) : (
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
