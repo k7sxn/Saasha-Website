@@ -11,7 +11,7 @@ const EventsPage = () => {
   const navigate = useNavigate();
   const [events, setEvents] = useState<Event[]>([]);
   const [loading, setLoading] = useState(true);
-  const [view, setView] = useState<'list' | 'gallery'>('list');
+  const [view, setView] = useState<'list' | 'grid'>('list');
   const [filter, setFilter] = useState<'all' | 'upcoming' | 'past'>(() => {
     const params = new URLSearchParams(location.search);
     return (params.get('filter') as 'all' | 'upcoming' | 'past') || 'all';
@@ -122,14 +122,14 @@ const EventsPage = () => {
                 List
               </button>
               <button
-                onClick={() => setView('gallery')}
+                onClick={() => setView('grid')}
                 className={`px-4 py-2 text-sm font-medium border-l border-gray-200 dark:border-dark-border rounded-r-lg ${
-                  view === 'gallery'
+                  view === 'grid'
                     ? 'bg-saasha-rose text-white'
                     : 'text-gray-700 dark:text-gray-300 hover:text-saasha-rose dark:hover:text-saasha-rose/80'
                 }`}
               >
-                Gallery
+                Grid
               </button>
             </div>
           </div>
@@ -147,18 +147,18 @@ const EventsPage = () => {
                 to={`/event/${event.id}`}
                 className="block bg-white dark:bg-dark-secondary rounded-lg shadow-lg overflow-hidden transform transition duration-300 hover:scale-105"
               >
-                <div className="md:flex">
-                  {event.image && (
-                    <div className="md:flex-shrink-0">
+                <div className="md:flex h-64">
+                  {event.header_image && (
+                    <div className="md:w-1/2 h-full">
                       <img
-                        className="h-48 w-full object-cover md:h-full md:w-48"
-                        src={event.image}
+                        className="w-full h-full object-cover"
+                        src={event.header_image}
                         alt={event.title}
                       />
                     </div>
                   )}
-                  <div className="p-8">
-                    <div className="flex items-center gap-4 mb-4">
+                  <div className="md:w-1/2 p-6 flex flex-col">
+                    <div className="flex items-center gap-2 mb-2">
                       <h2 className="text-2xl font-bold text-saasha-brown dark:text-dark-text">
                         {event.title}
                       </h2>
@@ -172,27 +172,31 @@ const EventsPage = () => {
                         {new Date(event.date) > new Date() ? 'Upcoming' : 'Past'}
                       </span>
                     </div>
-                    <p className="text-sm text-gray-500 dark:text-gray-400 mb-4">
-                      {new Date(event.date).toLocaleDateString('en-US', {
-                        month: 'short',
-                        day: 'numeric',
-                        year: 'numeric',
-                      })}
-                    </p>
+                    <div className="text-gray-600 dark:text-gray-400 text-sm space-y-2 mb-4">
+                      <div className="flex items-center">
+                        <svg className="h-4 w-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
+                        </svg>
+                        {new Date(event.date).toLocaleDateString('en-US', {
+                          month: 'short',
+                          day: 'numeric',
+                          year: 'numeric',
+                          hour: '2-digit',
+                          minute: '2-digit'
+                        })}
+                      </div>
+                      <div className="flex items-center">
+                        <svg className="h-4 w-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
+                        </svg>
+                        {event.location}
+                      </div>
+                    </div>
                     <div 
-                      className="prose prose-sm dark:prose-invert line-clamp-3
+                      className="prose prose-sm dark:prose-invert line-clamp-3 flex-grow
                         prose-headings:text-saasha-brown dark:prose-headings:text-dark-text
-                        prose-h1:text-lg prose-h1:font-bold
-                        prose-h2:text-base prose-h2:font-semibold
-                        prose-h3:text-sm prose-h3:font-medium
-                        prose-h4:text-sm
-                        prose-p:text-sm prose-p:text-gray-600 dark:prose-p:text-gray-400
-                        prose-a:text-saasha-rose hover:prose-a:text-saasha-rose/80
-                        prose-strong:text-saasha-brown dark:prose-strong:text-dark-text
-                        prose-ul:ml-4 prose-ul:list-disc prose-ul:list-outside
-                        prose-ol:ml-4 prose-ol:list-decimal prose-ol:list-outside
-                        prose-li:my-1 prose-li:text-gray-600 dark:prose-li:text-gray-400
-                        marker:text-gray-600 dark:marker:text-gray-400"
+                        prose-p:text-sm prose-p:text-gray-600 dark:prose-p:text-gray-400"
                       dangerouslySetInnerHTML={{ __html: event.description || '' }}
                     />
                   </div>
@@ -203,7 +207,7 @@ const EventsPage = () => {
         ) : (
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
             {events.map((event) => (
-              event.image && (
+              event.header_image && (
                 <Link
                   key={event.id}
                   to={`/event/${event.id}`}
@@ -211,7 +215,7 @@ const EventsPage = () => {
                 >
                   <div className="aspect-w-16 aspect-h-9">
                     <img
-                      src={event.image}
+                      src={event.header_image}
                       alt={event.title}
                       className="object-cover w-full h-full"
                     />
@@ -232,13 +236,27 @@ const EventsPage = () => {
                           {new Date(event.date) > new Date() ? 'Upcoming' : 'Past'}
                         </span>
                       </div>
-                      <p className="text-sm text-gray-200">
-                        {new Date(event.date).toLocaleDateString('en-US', {
-                          month: 'short',
-                          day: 'numeric',
-                          year: 'numeric',
-                        })}
-                      </p>
+                      <div className="space-y-1">
+                        <div className="flex items-center text-gray-200">
+                          <svg className="h-4 w-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
+                          </svg>
+                          {new Date(event.date).toLocaleDateString('en-US', {
+                            month: 'short',
+                            day: 'numeric',
+                            year: 'numeric',
+                            hour: '2-digit',
+                            minute: '2-digit'
+                          })}
+                        </div>
+                        <div className="flex items-center text-gray-200">
+                          <svg className="h-4 w-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
+                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
+                          </svg>
+                          {event.location}
+                        </div>
+                      </div>
                     </div>
                   </div>
                 </Link>
