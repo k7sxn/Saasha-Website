@@ -1,11 +1,15 @@
 import React from 'react';
 import { Heart, BookOpen } from 'lucide-react';
 import PageLayout from './layout/PageLayout';
+import { useLocation } from 'react-router-dom';
 
 const About = () => {
+  const location = useLocation();
+  const isHomePage = location.pathname === '/';
+
   return (
     <PageLayout>
-      <section className="bg-white dark:bg-dark-primary">
+      <section className={`bg-white dark:bg-dark-primary ${isHomePage ? '-mt-16' : ''}`}>
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
             <div>
