@@ -77,35 +77,6 @@ export interface Database {
           published?: boolean;
         };
       };
-      faqs: {
-        Row: {
-          id: string;
-          question: string;
-          answer: string | null;
-          order: number;
-          published: boolean;
-          created_at: string;
-          updated_at: string;
-        };
-        Insert: {
-          id?: string;
-          question: string;
-          answer?: string | null;
-          order?: number;
-          published?: boolean;
-          created_at?: string;
-          updated_at?: string;
-        };
-        Update: {
-          id?: string;
-          question?: string;
-          answer?: string | null;
-          order?: number;
-          published?: boolean;
-          created_at?: string;
-          updated_at?: string;
-        };
-      };
       volunteer_registrations: {
         Row: {
           id: string;
