@@ -24,7 +24,7 @@ const Team = () => {
   return (
     <PageLayout>
       <section className={`bg-white dark:bg-dark-primary ${isHomePage ? '-mt-16' : ''}`}>
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
           <div className="text-center mb-16">
             <h1 className="text-4xl font-bold text-saasha-brown dark:text-dark-text mb-4">
               Meet The Team
@@ -60,7 +60,7 @@ const Team = () => {
                 <h3 className="text-xl font-semibold text-saasha-brown dark:text-dark-text mb-2">
                   {member.name}
                 </h3>
-                <p className="text-saasha-rose dark:text-dark-accent">
+                <p className="text-saasha-rose dark:text-saasha-rose/90 font-medium">
                   {member.role}
                 </p>
               </div>
