@@ -47,10 +47,23 @@ const Footer = () => {
           </div>
           
           <div className="space-y-4">
-            <h3 className="font-semibold text-xl mb-4">Contact</h3>
+            <h3 className="font-semibold text-xl mb-4">Resources</h3>
             <ul className="space-y-2">
-              <li><Link to="/contact" className="hover:text-saasha-rose dark:hover:text-dark-accent transition-colors duration-300">Get in Touch</Link></li>
-              <li><Link to="/faq" className="hover:text-saasha-rose dark:hover:text-dark-accent transition-colors duration-300">FAQ</Link></li>
+              <li>
+                <Link to="/blogs" className="text-gray-600 dark:text-gray-400 hover:text-saasha-rose dark:hover:text-saasha-rose">
+                  Blog
+                </Link>
+              </li>
+              <li>
+                <Link to="/events" className="text-gray-600 dark:text-gray-400 hover:text-saasha-rose dark:hover:text-saasha-rose">
+                  Events
+                </Link>
+              </li>
+              <li>
+                <Link to="/faqs" className="text-gray-600 dark:text-gray-400 hover:text-saasha-rose dark:hover:text-saasha-rose">
+                  FAQs
+                </Link>
+              </li>
             </ul>
           </div>
         </div>

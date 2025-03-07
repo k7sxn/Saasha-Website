@@ -266,116 +266,103 @@ const AdminDashboard = () => {
                 {showManager ? (
                   <BlogPostManager />
                 ) : (
-                  <div className="space-y-6">
-                    <div className="flex justify-between items-center">
-                      <h2 className="text-2xl font-bold text-saasha-brown dark:text-dark-text">
-                        {editingId ? 'Edit Blog Post' : 'Create New Blog Post'}
-                      </h2>
-                      <button
-                        onClick={() => setShowManager(true)}
-                        className="text-saasha-brown dark:text-dark-text hover:text-saasha-rose"
-                      >
-                        Back to Posts
-                      </button>
-                    </div>
-                    <form onSubmit={handleSubmit} className="space-y-6">
-                      <div>
-                        <label className="block text-sm font-medium text-saasha-brown dark:text-dark-text mb-1">
-                          Title
-                        </label>
-                        <input
-                          type="text"
-                          required
-                          value={formData.title}
-                          onChange={(e) => setFormData({ ...formData, title: e.target.value })}
-                          className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-saasha-rose focus:border-saasha-rose dark:bg-dark-secondary dark:border-gray-600 dark:text-dark-text"
-                          disabled={isSubmitting}
-                        />
-                      </div>
-
-                      <div>
-                        <label className="block text-sm font-medium text-saasha-brown dark:text-dark-text mb-1">
-                          Header Image
-                        </label>
-                        <button
-                          type="button"
-                          onClick={handleImageUpload}
-                          disabled={isSubmitting}
-                          className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-saasha-rose focus:border-saasha-rose dark:bg-dark-secondary dark:border-gray-600 dark:text-dark-text text-left disabled:opacity-50 disabled:cursor-not-allowed"
-                        >
-                          {formData.header_image ? 'Change Image' : 'Upload Image'}
-                        </button>
-                        {formData.header_image && (
-                          <div className="mt-2">
-                            <img
-                              src={formData.header_image}
-                              alt="Header preview"
-                              className="h-32 object-cover rounded"
-                            />
-                          </div>
-                        )}
-                      </div>
-
-                      <div>
-                        <label className="block text-sm font-medium text-saasha-brown dark:text-dark-text mb-1">
-                          Tags (Press Enter to add)
-                        </label>
-                        <input
-                          type="text"
-                          value={tagInput}
-                          onChange={(e) => setTagInput(e.target.value)}
-                          onKeyDown={handleTagAdd}
-                          disabled={isSubmitting}
-                          className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-saasha-rose focus:border-saasha-rose dark:bg-dark-secondary dark:border-gray-600 dark:text-dark-text disabled:opacity-50 disabled:cursor-not-allowed"
-                          placeholder="Enter tags..."
-                        />
-                        <div className="mt-2 flex flex-wrap gap-2">
-                          {formData.tags?.map((tag, index) => (
-                            <span
-                              key={index}
-                              className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-saasha-rose text-white"
-                            >
-                              {tag}
-                              <button
-                                type="button"
-                                onClick={() => handleTagRemove(tag)}
-                                disabled={isSubmitting}
-                                className="ml-1 hover:text-saasha-cream disabled:opacity-50 disabled:cursor-not-allowed"
-                              >
-                                ×
-                              </button>
-                            </span>
-                          ))}
-                        </div>
-                      </div>
-
-                      <div>
-                        <label className="block text-sm font-medium text-saasha-brown dark:text-dark-text mb-1">
-                          Content
-                        </label>
-                        <RichTextEditor
-                          value={formData.content}
-                          onChange={(value) => setFormData({ ...formData, content: value })}
-                        />
-                      </div>
-
-                      <button
-                        type="submit"
+                  <form onSubmit={handleSubmit} className="space-y-6">
+                    <div>
+                      <label className="block text-sm font-medium text-saasha-brown dark:text-dark-text mb-1">
+                        Title
+                      </label>
+                      <input
+                        type="text"
+                        required
+                        value={formData.title}
+                        onChange={(e) => setFormData({ ...formData, title: e.target.value })}
+                        className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-saasha-rose focus:border-saasha-rose dark:bg-dark-secondary dark:border-gray-600 dark:text-dark-text"
                         disabled={isSubmitting}
-                        className="w-full bg-saasha-rose text-white py-2 px-4 rounded-md hover:bg-saasha-rose/90 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-saasha-rose disabled:opacity-50 disabled:cursor-not-allowed"
+                      />
+                    </div>
+
+                    <div>
+                      <label className="block text-sm font-medium text-saasha-brown dark:text-dark-text mb-1">
+                        Header Image
+                      </label>
+                      <button
+                        type="button"
+                        onClick={handleImageUpload}
+                        disabled={isSubmitting}
+                        className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-saasha-rose focus:border-saasha-rose dark:bg-dark-secondary dark:border-gray-600 dark:text-dark-text text-left disabled:opacity-50 disabled:cursor-not-allowed"
                       >
-                        {isSubmitting ? (
-                          <span className="flex items-center justify-center">
-                            <svg className="animate-spin -ml-1 mr-3 h-5 w-5 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
-                              <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
-                              <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
-                            </svg>
-                            Publishing...
-                          </span>
-                        ) : editingId ? 'Save Changes' : 'Publish Blog Post'}
+                        {formData.header_image ? 'Change Image' : 'Upload Image'}
                       </button>
-                    </form>
-                  </div>
+                      {formData.header_image && (
+                        <div className="mt-2">
+                          <img
+                            src={formData.header_image}
+                            alt="Header preview"
+                            className="h-32 object-cover rounded"
+                          />
+                        </div>
+                      )}
+                    </div>
+
+                    <div>
+                      <label className="block text-sm font-medium text-saasha-brown dark:text-dark-text mb-1">
+                        Tags (Press Enter to add)
+                      </label>
+                      <input
+                        type="text"
+                        value={tagInput}
+                        onChange={(e) => setTagInput(e.target.value)}
+                        onKeyDown={handleTagAdd}
+                        disabled={isSubmitting}
+                        className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-saasha-rose focus:border-saasha-rose dark:bg-dark-secondary dark:border-gray-600 dark:text-dark-text disabled:opacity-50 disabled:cursor-not-allowed"
+                        placeholder="Enter tags..."
+                      />
+                      <div className="mt-2 flex flex-wrap gap-2">
+                        {formData.tags?.map((tag, index) => (
+                          <span
+                            key={index}
+                            className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-saasha-rose text-white"
+                          >
+                            {tag}
+                            <button
+                              type="button"
+                              onClick={() => handleTagRemove(tag)}
+                              disabled={isSubmitting}
+                              className="ml-1 hover:text-saasha-cream disabled:opacity-50 disabled:cursor-not-allowed"
+                            >
+                              ×
+                            </button>
+                          </span>
+                        ))}
+                      </div>
+                    </div>
+
+                    <div>
+                      <label className="block text-sm font-medium text-saasha-brown dark:text-dark-text mb-1">
+                        Content
+                      </label>
+                      <RichTextEditor
+                        value={formData.content}
+                        onChange={(value) => setFormData({ ...formData, content: value })}
+                      />
+                    </div>
+
+                    <button
+                      type="submit"
+                      disabled={isSubmitting}
+                      className="w-full bg-saasha-rose text-white py-2 px-4 rounded-md hover:bg-saasha-rose/90 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-saasha-rose disabled:opacity-50 disabled:cursor-not-allowed"
+                    >
+                      {isSubmitting ? (
+                        <span className="flex items-center justify-center">
+                          <svg className="animate-spin -ml-1 mr-3 h-5 w-5 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                            <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
+                            <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                          </svg>
+                          Publishing...
+                        </span>
+                      ) : editingId ? 'Save Changes' : 'Publish Blog Post'}
+                    </button>
+                  </form>
                 )}
               </>
             )}

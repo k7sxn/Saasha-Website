@@ -1,3 +1,11 @@
+export type Json =
+  | string
+  | number
+  | boolean
+  | null
+  | { [key: string]: Json | undefined }
+  | Json[]
+
 export interface Database {
   public: {
     Tables: {
@@ -76,6 +84,33 @@ export interface Database {
           slug?: string;
           published?: boolean;
         };
+      };
+      faqs: {
+        Row: {
+          id: number;
+          question: string;
+          answer: string;
+          order: number;
+          created_at: string;
+          updated_at: string;
+        };
+        Insert: {
+          id?: number;
+          question: string;
+          answer: string;
+          order?: number;
+          created_at?: string;
+          updated_at?: string;
+        };
+        Update: {
+          id?: number;
+          question?: string;
+          answer?: string;
+          order?: number;
+          created_at?: string;
+          updated_at?: string;
+        };
+        Relationships: [];
       };
       volunteer_registrations: {
         Row: {
