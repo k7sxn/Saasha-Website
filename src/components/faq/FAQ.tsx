@@ -20,7 +20,7 @@ const FAQ = () => {
         .from('faqs')
         .select('*')
         .eq('published', true)
-        .order('sort_order', { ascending: true });
+        .order('order', { ascending: true });
 
       if (error) throw error;
       setFaqs(data || []);
@@ -69,11 +69,7 @@ const FAQ = () => {
                       prose-headings:text-saasha-brown dark:prose-headings:text-dark-text
                       prose-p:text-gray-700 dark:prose-p:text-gray-300
                       prose-a:text-saasha-rose hover:prose-a:text-saasha-rose/80
-                      prose-strong:text-saasha-brown dark:prose-strong:text-dark-text
-                      prose-ul:ml-6 prose-ul:list-disc prose-ul:list-outside
-                      prose-ol:ml-6 prose-ol:list-decimal prose-ol:list-outside
-                      prose-li:my-2 prose-li:text-gray-700 dark:prose-li:text-gray-300
-                      marker:text-gray-700 dark:marker:text-gray-300"
+                      prose-strong:text-saasha-brown dark:prose-strong:text-dark-text"
                     dangerouslySetInnerHTML={{ __html: faq.answer || '' }}
                   />
                 </div>

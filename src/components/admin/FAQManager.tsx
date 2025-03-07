@@ -11,7 +11,7 @@ const FAQManager = () => {
   const [editingFaq, setEditingFaq] = useState<FAQ | null>(null);
   const [question, setQuestion] = useState('');
   const [answer, setAnswer] = useState('');
-  const [sortOrder, setSortOrder] = useState(0);
+  const [order, setOrder] = useState(0);
   const [published, setPublished] = useState(true);
 
   useEffect(() => {
@@ -24,7 +24,7 @@ const FAQManager = () => {
       const { data, error } = await supabase
         .from('faqs')
         .select('*')
-        .order('sort_order', { ascending: true });
+        .order('order', { ascending: true });
 
       if (error) throw error;
       setFaqs(data || []);
@@ -39,7 +39,7 @@ const FAQManager = () => {
     setEditingFaq(null);
     setQuestion('');
     setAnswer('');
-    setSortOrder(faqs.length);
+    setOrder(faqs.length);
     setPublished(true);
   };
 
@@ -52,7 +52,7 @@ const FAQManager = () => {
           .update({
             question,
             answer,
-            sort_order: sortOrder,
+            order,
             published,
             updated_at: new Date().toISOString(),
           })
@@ -66,7 +66,7 @@ const FAQManager = () => {
             {
               question,
               answer,
-              sort_order: sortOrder,
+              order,
               published,
               created_at: new Date().toISOString(),
               updated_at: new Date().toISOString(),
@@ -87,7 +87,7 @@ const FAQManager = () => {
     setEditingFaq(faq);
     setQuestion(faq.question);
     setAnswer(faq.answer || '');
-    setSortOrder(faq.sort_order);
+    setOrder(faq.order);
     setPublished(faq.published);
   };
 
@@ -148,12 +148,12 @@ const FAQManager = () => {
           <div className="grid grid-cols-2 gap-4">
             <div>
               <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
-                Sort Order
+                Order
               </label>
               <input
                 type="number"
-                value={sortOrder}
-                onChange={(e) => setSortOrder(parseInt(e.target.value))}
+                value={order}
+                onChange={(e) => setOrder(parseInt(e.target.value))}
                 className="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-saasha-rose dark:bg-dark-primary dark:border-dark-border dark:text-dark-text"
                 min="0"
                 required
@@ -199,7 +199,7 @@ const FAQManager = () => {
           <thead className="bg-gray-50 dark:bg-dark-secondary">
             <tr>
               <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">
-                Sort Order
+                Order
               </th>
               <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">
                 Question
@@ -219,7 +219,7 @@ const FAQManager = () => {
             {faqs.map((faq) => (
               <tr key={faq.id}>
                 <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500 dark:text-gray-400">
-                  {faq.sort_order}
+                  {faq.order}
                 </td>
                 <td className="px-6 py-4 text-sm text-gray-900 dark:text-gray-100">
                   {faq.question}

@@ -82,7 +82,7 @@ export interface Database {
           id: string;
           question: string;
           answer: string | null;
-          sort_order: number;
+          order: number;
           published: boolean;
           created_at: string;
           updated_at: string;
@@ -91,7 +91,7 @@ export interface Database {
           id?: string;
           question: string;
           answer?: string | null;
-          sort_order?: number;
+          order?: number;
           published?: boolean;
           created_at?: string;
           updated_at?: string;
@@ -100,39 +100,7 @@ export interface Database {
           id?: string;
           question?: string;
           answer?: string | null;
-          sort_order?: number;
-          published?: boolean;
-          created_at?: string;
-          updated_at?: string;
-        };
-      };
-      gallery: {
-        Row: {
-          id: string;
-          title: string;
-          description: string | null;
-          image_url: string;
-          sort_order: number;
-          published: boolean;
-          created_at: string;
-          updated_at: string;
-        };
-        Insert: {
-          id?: string;
-          title: string;
-          description?: string | null;
-          image_url: string;
-          sort_order?: number;
-          published?: boolean;
-          created_at?: string;
-          updated_at?: string;
-        };
-        Update: {
-          id?: string;
-          title?: string;
-          description?: string | null;
-          image_url?: string;
-          sort_order?: number;
+          order?: number;
           published?: boolean;
           created_at?: string;
           updated_at?: string;
