@@ -42,31 +42,21 @@ const Footer = () => {
             <ul className="space-y-2">
               <li><Link to="/events" className="hover:text-saasha-rose dark:hover:text-dark-accent transition-colors duration-300">Upcoming</Link></li>
               <li><Link to="/events" className="hover:text-saasha-rose dark:hover:text-dark-accent transition-colors duration-300">Past Events</Link></li>
-              <li><Link to="/" className="hover:text-saasha-rose dark:hover:text-dark-accent transition-colors duration-300">Gallery</Link></li>
+              <li><Link to="/gallery" className="hover:text-saasha-rose dark:hover:text-dark-accent transition-colors duration-300">Gallery</Link></li>
             </ul>
           </div>
           
           <div className="space-y-4">
-            <h3 className="text-lg font-semibold text-saasha-brown dark:text-dark-text">Resources</h3>
+            <h3 className="font-semibold text-xl mb-4">Resources</h3>
             <ul className="space-y-2">
-              <li>
-                <Link to="/blogs" className="text-gray-600 dark:text-gray-300 hover:text-saasha-rose dark:hover:text-saasha-rose/80">
-                  Blog
-                </Link>
-              </li>
               <li>
                 <Link to="/events" className="text-gray-600 dark:text-gray-300 hover:text-saasha-rose dark:hover:text-saasha-rose/80">
                   All Events
                 </Link>
               </li>
               <li>
-                <Link to="/events?filter=upcoming" className="text-gray-600 dark:text-gray-300 hover:text-saasha-rose dark:hover:text-saasha-rose/80">
-                  Upcoming Events
-                </Link>
-              </li>
-              <li>
-                <Link to="/events?filter=past" className="text-gray-600 dark:text-gray-300 hover:text-saasha-rose dark:hover:text-saasha-rose/80">
-                  Past Events
+                <Link to="/blogs" className="text-gray-600 dark:text-gray-300 hover:text-saasha-rose dark:hover:text-saasha-rose/80">
+                  Blogs
                 </Link>
               </li>
               <li>

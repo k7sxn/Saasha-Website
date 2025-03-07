@@ -20,7 +20,6 @@ import EventsPage from './components/events/EventsPage';
 import EventPage from './components/events/EventPage';
 import VolunteerPage from './components/volunteer/VolunteerPage';
 import FAQ from './components/faq/FAQ';
-import { useScrollToTop } from './hooks/useScrollToTop';
 
 // Protected Route component
 const ProtectedRoute: React.FC<{ children: React.ReactNode }> = ({ children }) => {
@@ -37,7 +36,6 @@ const ProtectedRoute: React.FC<{ children: React.ReactNode }> = ({ children }) =
 const MainApp = () => {
   const location = useLocation();
   const [hasAccess, setHasAccess] = useState(false);
-  useScrollToTop();
 
   useEffect(() => {
     // Check if user already has access
