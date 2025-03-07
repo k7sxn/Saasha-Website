@@ -10,12 +10,12 @@ const ComingSoon = () => {
   });
 
   useEffect(() => {
-    // Set launch date to April 6th, 2024 at 3 PM IST
-    const launchDate = new Date('2024-04-06T15:00:00+05:30');
+    // Set launch date to April 1st, 2025 at 3 PM IST
+    const launchDate = new Date('2025-04-01T15:00:00+05:30');
 
     const timer = setInterval(() => {
-      const now = new Date().getTime();
-      const distance = launchDate.getTime() - now;
+      const now = new Date();
+      const distance = launchDate.getTime() - now.getTime();
 
       // If launch date has passed
       if (distance < 0) {
@@ -37,12 +37,13 @@ const ComingSoon = () => {
       });
     }, 1000);
 
+    // Cleanup interval on component unmount
     return () => clearInterval(timer);
-  }, []);
+  }, []); // Empty dependency array means this effect runs once on mount
 
   const CountdownBox = ({ value, label }: { value: number; label: string }) => (
     <div className="flex flex-col items-center bg-black/20 backdrop-blur-sm rounded-lg p-4 min-w-[100px]">
-      <span className="text-4xl font-bold text-white">{value}</span>
+      <span className="text-4xl font-bold text-white">{String(value).padStart(2, '0')}</span>
       <span className="text-sm text-white/70">{label}</span>
     </div>
   );
@@ -59,7 +60,7 @@ const ComingSoon = () => {
         
         <p className="text-xl md:text-2xl text-white/80 mb-12">
           We're crafting something special to serve our community better.
-          <br />Join us on April 6th at 3 PM for our grand launch!
+          <br />Join us on April 1st at 3 PM for our grand launch!
         </p>
 
         <div className="flex flex-wrap justify-center gap-4 mb-12">
