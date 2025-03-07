@@ -29,7 +29,7 @@ const FAQPage = () => {
 
   return (
     <PageLayout>
-      <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
+      <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
         <h1 className="text-4xl font-bold text-saasha-brown dark:text-dark-text mb-8">
           Frequently Asked Questions
         </h1>
