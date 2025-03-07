@@ -17,6 +17,7 @@ import AdminDashboard from './components/admin/AdminDashboard';
 import BlogList from './components/blog/BlogList';
 import BlogPost from './components/blog/BlogPost';
 import EventsPage from './components/events/EventsPage';
+import EventPage from './components/events/EventPage';
 import VolunteerPage from './components/volunteer/VolunteerPage';
 
 // Protected Route component
@@ -70,6 +71,7 @@ const MainApp = () => {
         <Route path="/contact" element={<Contact />} />
         <Route path="/volunteer" element={<VolunteerPage />} />
         <Route path="/events" element={<EventsPage />} />
+        <Route path="/event/:id" element={<EventPage />} />
         <Route path="/donate" element={<Donate />} />
         <Route path="/whysupport" element={<WhySupport />} />
         <Route path="/blogs" element={<BlogList />} />

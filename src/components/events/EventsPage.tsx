@@ -64,7 +64,7 @@ const EventsPage = () => {
               {events.map((event) => (
                 <Link
                   key={event.id}
-                  to={`/events/${event.id}`}
+                  to={`/event/${event.id}`}
                   className="bg-white dark:bg-dark-secondary rounded-lg shadow-lg overflow-hidden transform transition duration-300 hover:scale-105"
                 >
                   {event.image && (
