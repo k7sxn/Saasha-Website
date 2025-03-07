@@ -7,7 +7,7 @@ interface PageLayoutProps {
 
 const PageLayout: React.FC<PageLayoutProps> = ({ children, className = '' }) => {
   return (
-    <div className={`pt-24 min-h-screen ${className}`}>
+    <div className={`pt-12 min-h-screen ${className}`}>
       {children}
     </div>
   );

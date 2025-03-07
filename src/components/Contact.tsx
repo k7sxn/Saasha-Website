@@ -69,7 +69,7 @@ const Contact = () => {
             <p className="mt-4 text-xl text-saasha-brown/70 dark:text-dark-text/70">We'd love to hear from you</p>
           </div>
 
-          <div className="mt-20 grid grid-cols-1 gap-8 md:grid-cols-2">
+          <div className="mt-10 grid grid-cols-1 gap-8 md:grid-cols-2">
             <ContactCard
               icon={<Mail className="h-6 w-6" />}
               title="Email"
