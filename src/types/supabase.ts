@@ -106,32 +106,6 @@ export interface Database {
           updated_at?: string;
         };
       };
-      gallery: {
-        Row: {
-          id: string;
-          image_url: string;
-          caption: string | null;
-          published: boolean;
-          created_at: string;
-          updated_at: string;
-        };
-        Insert: {
-          id?: string;
-          image_url: string;
-          caption?: string | null;
-          published?: boolean;
-          created_at?: string;
-          updated_at?: string;
-        };
-        Update: {
-          id?: string;
-          image_url?: string;
-          caption?: string | null;
-          published?: boolean;
-          created_at?: string;
-          updated_at?: string;
-        };
-      };
       volunteer_registrations: {
         Row: {
           id: string;

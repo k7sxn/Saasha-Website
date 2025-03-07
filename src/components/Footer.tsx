@@ -40,21 +40,9 @@ const Footer = () => {
           <div className="space-y-4">
             <h3 className="font-semibold text-xl mb-4">Events</h3>
             <ul className="space-y-2">
-              <li>
-                <Link to="/events?filter=upcoming" className="hover:text-saasha-rose dark:hover:text-dark-accent transition-colors duration-300">
-                  Upcoming
-                </Link>
-              </li>
-              <li>
-                <Link to="/events?filter=past" className="hover:text-saasha-rose dark:hover:text-dark-accent transition-colors duration-300">
-                  Past Events
-                </Link>
-              </li>
-              <li>
-                <Link to="/gallery" className="hover:text-saasha-rose dark:hover:text-dark-accent transition-colors duration-300">
-                  Gallery
-                </Link>
-              </li>
+              <li><Link to="/events" className="hover:text-saasha-rose dark:hover:text-dark-accent transition-colors duration-300">Upcoming</Link></li>
+              <li><Link to="/events" className="hover:text-saasha-rose dark:hover:text-dark-accent transition-colors duration-300">Past Events</Link></li>
+              <li><Link to="/gallery" className="hover:text-saasha-rose dark:hover:text-dark-accent transition-colors duration-300">Gallery</Link></li>
             </ul>
           </div>
           
