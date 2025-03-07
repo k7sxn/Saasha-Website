@@ -30,9 +30,14 @@ const FAQPage = () => {
   return (
     <PageLayout>
       <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
-        <h1 className="text-4xl font-bold text-saasha-brown dark:text-dark-text mb-8">
-          Frequently Asked Questions
-        </h1>
+        <div className="text-center mb-12">
+            <h1 className="text-4xl font-bold text-saasha-brown dark:text-dark-text mb-4">
+            Frequently Asked Questions
+            </h1>
+            <p className="text-lg text-gray-600 dark:text-gray-300">
+              Get answers to your questions about your existence
+            </p>
+          </div>
         
         {loading ? (
           <div className="flex items-center justify-center min-h-[400px]">
