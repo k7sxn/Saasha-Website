@@ -22,9 +22,9 @@ const Footer = () => {
           <div className="space-y-4">
             <h3 className="font-semibold text-xl mb-4">About</h3>
             <ul className="space-y-2">
-              <li><Link to="/" className="hover:text-saasha-rose dark:hover:text-dark-accent transition-colors duration-300">Our Story</Link></li>
-              <li><Link to="/" className="hover:text-saasha-rose dark:hover:text-dark-accent transition-colors duration-300">Team</Link></li>
-              <li><Link to="/" className="hover:text-saasha-rose dark:hover:text-dark-accent transition-colors duration-300">Careers</Link></li>
+              <li><Link to="/about" className="hover:text-saasha-rose dark:hover:text-dark-accent transition-colors duration-300">Our Story</Link></li>
+              <li><Link to="/team" className="hover:text-saasha-rose dark:hover:text-dark-accent transition-colors duration-300">Team</Link></li>
+              <li><Link to="/volunteer" className="hover:text-saasha-rose dark:hover:text-dark-accent transition-colors duration-300">Volunteer</Link></li>
             </ul>
           </div>
           
@@ -40,8 +40,8 @@ const Footer = () => {
           <div className="space-y-4">
             <h3 className="font-semibold text-xl mb-4">Events</h3>
             <ul className="space-y-2">
-              <li><Link to="/" className="hover:text-saasha-rose dark:hover:text-dark-accent transition-colors duration-300">Upcoming</Link></li>
-              <li><Link to="/" className="hover:text-saasha-rose dark:hover:text-dark-accent transition-colors duration-300">Past Events</Link></li>
+              <li><Link to="/events" className="hover:text-saasha-rose dark:hover:text-dark-accent transition-colors duration-300">Upcoming</Link></li>
+              <li><Link to="/events" className="hover:text-saasha-rose dark:hover:text-dark-accent transition-colors duration-300">Past Events</Link></li>
               <li><Link to="/" className="hover:text-saasha-rose dark:hover:text-dark-accent transition-colors duration-300">Gallery</Link></li>
             </ul>
           </div>
@@ -50,8 +50,7 @@ const Footer = () => {
             <h3 className="font-semibold text-xl mb-4">Contact</h3>
             <ul className="space-y-2">
               <li><Link to="/contact" className="hover:text-saasha-rose dark:hover:text-dark-accent transition-colors duration-300">Get in Touch</Link></li>
-              <li><Link to="/contact" className="hover:text-saasha-rose dark:hover:text-dark-accent transition-colors duration-300">Support</Link></li>
-              <li><Link to="/contact" className="hover:text-saasha-rose dark:hover:text-dark-accent transition-colors duration-300">FAQ</Link></li>
+              <li><Link to="/faq" className="hover:text-saasha-rose dark:hover:text-dark-accent transition-colors duration-300">FAQ</Link></li>
             </ul>
           </div>
         </div>

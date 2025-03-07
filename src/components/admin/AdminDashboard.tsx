@@ -6,6 +6,7 @@ import RichTextEditor from './RichTextEditor';
 import BlogPostManager from './BlogPostManager';
 import EventManager from './EventManager';
 import VolunteerManager from './VolunteerManager';
+import FAQManager from './FAQManager';
 import PageLayout from '../layout/PageLayout';
 import { Database } from '../../types/supabase';
 
@@ -22,7 +23,7 @@ const CLOUDINARY_PRESET = 'saasha_blog'; // Create this in your Cloudinary dashb
 const AdminDashboard = () => {
   const { logout } = useAuth();
   const navigate = useNavigate();
-  const [activeTab, setActiveTab] = useState<'blogs' | 'events' | 'volunteers'>('blogs');
+  const [activeTab, setActiveTab] = useState<'blogs' | 'events' | 'volunteers' | 'faqs'>('blogs');
   const [formData, setFormData] = useState<BlogPost>({
     title: '',
     content: '',
@@ -221,7 +222,17 @@ const AdminDashboard = () => {
                   : 'text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-300'
               }`}
             >
-              Volunteer Applications
+              Volunteers
+            </button>
+            <button
+              onClick={() => setActiveTab('faqs')}
+              className={`px-4 py-2 -mb-px text-sm font-medium ${
+                activeTab === 'faqs'
+                  ? 'border-b-2 border-saasha-rose text-saasha-rose'
+                  : 'text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-300'
+              }`}
+            >
+              FAQs
             </button>
           </div>
 
@@ -371,6 +382,7 @@ const AdminDashboard = () => {
 
             {activeTab === 'events' && <EventManager />}
             {activeTab === 'volunteers' && <VolunteerManager />}
+            {activeTab === 'faqs' && <FAQManager />}
           </div>
         </div>
       </div>
