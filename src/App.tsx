@@ -20,6 +20,7 @@ import EventsPage from './components/events/EventsPage';
 import EventPage from './components/events/EventPage';
 import VolunteerPage from './components/volunteer/VolunteerPage';
 import FAQPage from './components/faq/FAQPage';
+import { Toaster } from 'react-hot-toast';
 
 // Protected Route component
 const ProtectedRoute: React.FC<{ children: React.ReactNode }> = ({ children }) => {
@@ -58,6 +59,7 @@ const MainApp = () => {
 
   return (
     <div className="min-h-screen bg-saasha-cream dark:bg-dark-primary dark:text-dark-text transition-colors duration-200">
+      <Toaster position="top-right" />
       <Navbar />
       <Routes>
         <Route path="/" element={
