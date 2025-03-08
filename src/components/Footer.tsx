@@ -52,9 +52,9 @@ const Footer = () => {
           <div className="space-y-4">
             <h3 className="font-semibold text-xl mb-4">Events</h3>
             <ul className="space-y-2">
+            <li><ScrollToTopLink to="/events" className="hover:text-saasha-rose dark:hover:text-dark-accent transition-colors duration-300">Events</ScrollToTopLink></li>
               <li><ScrollToTopLink to="/events?upcoming" className="hover:text-saasha-rose dark:hover:text-dark-accent transition-colors duration-300">Upcoming</ScrollToTopLink></li>
-              <li><ScrollToTopLink to="/events?past" className="hover:text-saasha-rose dark:hover:text-dark-accent transition-colors duration-300">Past Events</ScrollToTopLink></li>
-              <li><ScrollToTopLink to="/gallery" className="hover:text-saasha-rose dark:hover:text-dark-accent transition-colors duration-300">Gallery</ScrollToTopLink></li>
+              <li><ScrollToTopLink to="/events?past" className="hover:text-saasha-rose dark:hover:text-dark-accent transition-colors duration-300">Past</ScrollToTopLink></li>
             </ul>
           </div>
           
@@ -67,8 +67,8 @@ const Footer = () => {
                 </ScrollToTopLink>
               </li>
               <li>
-                <ScrollToTopLink to="/events" className="hover:text-saasha-rose dark:hover:text-dark-accent transition-colors duration-300">
-                  Events
+                <ScrollToTopLink to="/gallery" className="hover:text-saasha-rose dark:hover:text-dark-accent transition-colors duration-300">
+                  Gallery
                 </ScrollToTopLink>
               </li>
               <li>
