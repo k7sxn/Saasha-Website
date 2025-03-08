@@ -1,91 +1,113 @@
-import React, { useState } from 'react';
-import { Link } from 'react-router-dom';
-import { Menu, X } from 'lucide-react';
+import React, { useEffect, useState } from 'react';
+import { BrowserRouter as Router, Routes, Route, useLocation, Navigate } from 'react-router-dom';
+import { DarkModeProvider } from './context/DarkModeContext';
+import { AuthProvider, useAuth } from './context/AuthContext';
+import { FaInstagram } from 'react-icons/fa';
+import Navbar from './components/Navbar';
+import Hero from './components/Hero';
+import About from './components/About';
+import Contact from './components/Contact';
+import WhySupport from './components/WhySupport';
+import Team from './components/Team';
+import Footer from './components/Footer';
+import Donate from './components/Donate';
+import DarkModeToggle from './components/DarkModeToggle';
+import ComingSoon from './components/ComingSoon';
+import AdminLogin from './components/admin/AdminLogin';
+import AdminDashboard from './components/admin/AdminDashboard';
+import BlogList from './components/blog/BlogList';
+import BlogPost from './components/blog/BlogPost';
+import EventsPage from './components/events/EventsPage';
+import EventPage from './components/events/EventPage';
+import VolunteerPage from './components/volunteer/VolunteerPage';
+import FAQPage from './components/faq/FAQPage';
 
-const Navbar = () => {
-  const [isOpen, setIsOpen] = useState(false);
+// Protected Route component
+const ProtectedRoute: React.FC<{ children: React.ReactNode }> = ({ children }) => {
+  const { isAuthenticated } = useAuth();
+  const location = useLocation();
 
-  const closeMenu = () => {
-    setIsOpen(false);
-  };
+  if (!isAuthenticated) {
+    return <Navigate to="/admin" state={{ from: location }} replace />;
+  }
+
+  return <>{children}</>;
+};
+
+const MainApp = () => {
+  const location = useLocation();
+  const [hasAccess, setHasAccess] = useState(false);
+
+  useEffect(() => {
+    const storedAccess = localStorage.getItem('hasAccess');
+    if (location.search.includes('?admin')) {
+      localStorage.setItem('hasAccess', 'true');
+      setHasAccess(true);
+    } else if (storedAccess === 'true') {
+      setHasAccess(true);
+    }
+  }, [location.search]);
+
+  if (!hasAccess) {
+    return <ComingSoon />;
+  }
 
   return (
-    <nav className="fixed w-full z-50 px-4 py-3">
-      <div className="max-w-7xl mx-auto">
-        <div className="bg-saasha-cream/80 dark:bg-dark-secondary/80 backdrop-blur-md rounded-2xl shadow-lg px-6 py-4">
-          <div className="flex justify-between items-center">
-            <div className="flex items-center">
-              <Link to="/" onClick={closeMenu} className="text-2xl font-bold text-saasha-brown dark:text-dark-text">saasha</Link>
-            </div>
-            
-            <div className="hidden md:flex items-center space-x-8">
-              <NavLink to="/" text="Home" />
-              <NavLink to="/about" text="About Us" />
-              <NavLink to="/team" text="Team" />
-              <NavLink to="/events" text="Events" />
-              <NavLink to="/blogs" text="Blogs" />
-              <NavLink to="/contact" text="Contact" />
-              <Link 
-                to="/volunteer" 
-                className="bg-saasha-rose text-saasha-cream px-6 py-2 rounded-full hover:bg-saasha-brown dark:hover:bg-dark-accent transition-colors duration-300"
-              >
-                Volunteer
-              </Link>
-            </div>
-
-            <div className="md:hidden">
-              <button 
-                onClick={() => setIsOpen(!isOpen)}
-                className="text-saasha-brown dark:text-dark-text p-2"
-              >
-                {isOpen ? <X className="h-6 w-6" /> : <Menu className="h-6 w-6" />}
-              </button>
-            </div>
-          </div>
-
-          {/* Mobile menu */}
-          {isOpen && (
-            <div className="md:hidden mt-4 pt-4 border-t border-saasha-brown/10 dark:border-dark-text/10">
-              <div className="flex flex-col space-y-4">
-                <MobileNavLink to="/" text="Home" onClick={closeMenu} />
-                <MobileNavLink to="/about" text="About Us" onClick={closeMenu} />
-                <MobileNavLink to="/team" text="Team" onClick={closeMenu} />
-                <MobileNavLink to="/events" text="Events" onClick={closeMenu} />
-                <MobileNavLink to="/blogs" text="Blogs" onClick={closeMenu} />
-                <MobileNavLink to="/contact" text="Contact" onClick={closeMenu} />
-                <Link 
-                  to="/volunteer" 
-                  onClick={closeMenu}
-                  className="bg-saasha-rose text-saasha-cream px-6 py-2 rounded-full hover:bg-saasha-brown dark:hover:bg-dark-accent transition-colors duration-300 w-full text-center"
-                >
-                  Volunteer
-                </Link>
-              </div>
-            </div>
-          )}
-        </div>
+    <div className="min-h-screen bg-saasha-cream dark:bg-dark-primary dark:text-dark-text transition-colors duration-200">
+      <Navbar />
+      <div className="absolute top-4 right-4">
+        <a 
+          href="https://www.instagram.com/yourusername/" 
+          target="_blank" 
+          rel="noopener noreferrer"
+          className="text-pink-500 hover:text-pink-700 text-2xl"
+        >
+          <FaInstagram />
+        </a>
       </div>
-    </nav>
+      <Routes>
+        <Route path="/" element={<><Hero /><About /><WhySupport /></>} />
+        <Route path="/about" element={<About />} />
+        <Route path="/team" element={<Team />} />
+        <Route path="/contact" element={<Contact />} />
+        <Route path="/volunteer" element={<VolunteerPage />} />
+        <Route path="/events" element={<EventsPage />} />
+        <Route path="/event/:id" element={<EventPage />} />
+        <Route path="/donate" element={<Donate />} />
+        <Route path="/whysupport" element={<WhySupport />} />
+        <Route path="/blogs" element={<BlogList />} />
+        <Route path="/blog" element={<Navigate to="/blogs" replace />} />
+        <Route path="/blog/:slug" element={<BlogPost />} />
+        <Route path="/faqs" element={<FAQPage />} />
+        <Route path="/admin" element={<AdminLogin />} />
+        <Route path="/admin/dashboard" element={<ProtectedRoute><AdminDashboard /></ProtectedRoute>} />
+      </Routes>
+      <Footer />
+      <div className="text-center py-4">
+        <a 
+          href="https://www.instagram.com/yourusername/" 
+          target="_blank" 
+          rel="noopener noreferrer"
+          className="text-pink-500 hover:text-pink-700 text-lg"
+        >
+          Follow us on Instagram
+        </a>
+      </div>
+      <DarkModeToggle />
+    </div>
   );
 };
 
-const NavLink = ({ to, text }: { to: string; text: string }) => (
-  <Link
-    to={to}
-    className="text-saasha-brown dark:text-dark-text hover:text-saasha-rose dark:hover:text-dark-accent transition-colors duration-300 font-medium"
-  >
-    {text}
-  </Link>
-);
+function App() {
+  return (
+    <DarkModeProvider>
+      <AuthProvider>
+        <Router>
+          <MainApp />
+        </Router>
+      </AuthProvider>
+    </DarkModeProvider>
+  );
+}
 
-const MobileNavLink = ({ to, text, onClick, className }: { to: string; text: string; onClick?: () => void; className?: string }) => (
-  <Link
-    to={to}
-    onClick={onClick}
-    className={className || "text-saasha-brown dark:text-dark-text hover:text-saasha-rose dark:hover:text-dark-accent transition-colors duration-300 font-medium block w-full text-center"}
-  >
-    {text}
-  </Link>
-);
-
-export default Navbar;
+export default App;
