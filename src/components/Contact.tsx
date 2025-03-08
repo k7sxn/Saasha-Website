@@ -1,21 +1,38 @@
-import React, { useState, FormEvent } from 'react';
-import { Mail, Phone, MapPin } from 'lucide-react';
+import { Mail, MessageSquare, Instagram, Send, Loader2 } from 'lucide-react';
+import { useState, FormEvent } from 'react';
 import toast, { Toaster } from 'react-hot-toast';
+import { motion } from 'framer-motion';
+import { zodResolver } from '@hookform/resolvers/zod';
+import { useForm } from 'react-hook-form';
+import { z } from 'zod';
 import PageLayout from './layout/PageLayout';
 
-interface FormData {
-  name: string;
-  email: string;
-  message: string;
-}
+const contactSchema = z.object({
+  name: z.string().min(2, 'Name must be at least 2 characters'),
+  email: z.string().email('Please enter a valid email'),
+  subject: z.string().min(5, 'Subject must be at least 5 characters'),
+  message: z.string().min(10, 'Message must be at least 10 characters'),
+});
+
+type ContactFormData = z.infer<typeof contactSchema>;
 
 const Contact = () => {
-  const [formData, setFormData] = useState<FormData>({
+  const [formData, setFormData] = useState<ContactFormData>({
     name: '',
     email: '',
+    subject: '',
     message: ''
   });
   const [isSubmitting, setIsSubmitting] = useState(false);
+
+  const {
+    register,
+    handleSubmit,
+    reset,
+    formState: { errors }
+  } = useForm<ContactFormData>({
+    resolver: zodResolver(contactSchema),
+  });
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     const { name, value } = e.target;
@@ -25,7 +42,7 @@ const Contact = () => {
     }));
   };
 
-  const handleSubmit = async (e: FormEvent) => {
+  const handleFormSubmit = async (e: FormEvent) => {
     e.preventDefault();
     setIsSubmitting(true);
 
@@ -47,7 +64,7 @@ const Contact = () => {
 
       if (data.success) {
         toast.success('Message sent successfully!');
-        setFormData({ name: '', email: '', message: '' });
+        reset();
       } else {
         throw new Error('Failed to send message');
       }
@@ -59,88 +76,154 @@ const Contact = () => {
     }
   };
 
+  const containerVariants = {
+    hidden: { opacity: 0, y: 20 },
+    visible: {
+      opacity: 1,
+      y: 0,
+      transition: {
+        duration: 0.6,
+        staggerChildren: 0.1,
+      },
+    },
+  };
+
+  const itemVariants = {
+    hidden: { opacity: 0, y: 20 },
+    visible: { opacity: 1, y: 0 },
+  };
+
   return (
     <PageLayout>
       <div className="bg-saasha-cream dark:bg-dark-primary py-4" id="contact">
         <Toaster position="top-center" />
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="text-center">
-            <h2 className="text-3xl font-extrabold text-saasha-brown dark:text-dark-text sm:text-4xl">Get in Touch</h2>
-            <p className="mt-4 text-xl text-saasha-brown/70 dark:text-dark-text/70">We'd love to hear from you</p>
-          </div>
+          <motion.div
+            initial="hidden"
+            whileInView="visible"
+            viewport={{ once: true }}
+            variants={containerVariants}
+            className="text-center"
+          >
+            <h2 className="text-3xl font-extrabold text-saasha-brown dark:text-dark-text sm:text-4xl">
+              Get in Touch
+            </h2>
+            <p className="mt-4 text-xl text-saasha-brown/70 dark:text-dark-text/70">
+              We’d love to hear from you
+            </p>
+          </motion.div>
 
           <div className="mt-10 grid grid-cols-1 gap-8 md:grid-cols-2">
-            <ContactCard
-              icon={<Mail className="h-6 w-6" />}
-              title="Email"
-              content="help.foundation.saasha@gmail.com"
-            />
-            <ContactCard
-              icon={<Mail className="h-6 w-6" />}
-              title="Email"
-              content="foundation.saasha@gmail.com"
-            />
+            <motion.div variants={itemVariants}>
+              <div className="text-center">
+                <div className="flex justify-center text-saasha-rose dark:text-dark-accent">
+                  <Mail className="h-6 w-6" />
+                </div>
+                <h3 className="mt-4 text-lg font-medium text-saasha-brown dark:text-dark-text">Email</h3>
+                <p className="mt-2 text-saasha-brown/70 dark:text-dark-text/70">
+                  help.foundation.saasha@gmail.com
+                </p>
+              </div>
+            </motion.div>
+
+            <motion.div variants={itemVariants}>
+              <div className="text-center">
+                <div className="flex justify-center text-saasha-rose dark:text-dark-accent">
+                  <MessageSquare className="h-6 w-6" />
+                </div>
+                <h3 className="mt-4 text-lg font-medium text-saasha-brown dark:text-dark-text">WhatsApp</h3>
+                <p className="mt-2 text-saasha-brown/70 dark:text-dark-text/70">
+                  Join our community on WhatsApp!
+                </p>
+              </div>
+            </motion.div>
           </div>
 
-          <form onSubmit={handleSubmit} className="mt-16 max-w-xl mx-auto">
-            <div className="grid grid-cols-1 gap-6">
+          <motion.div variants={itemVariants} className="mt-16 max-w-xl mx-auto">
+            <form onSubmit={handleSubmit(handleFormSubmit)} className="grid grid-cols-1 gap-6">
               <div>
-                <label htmlFor="name" className="block text-sm font-medium text-saasha-brown dark:text-dark-text">Name</label>
-                <input 
-                  type="text" 
+                <label htmlFor="name" className="block text-sm font-medium text-saasha-brown dark:text-dark-text">
+                  Full Name
+                </label>
+                <input
+                  type="text"
                   id="name"
                   name="name"
-                  value={formData.name}
-                  onChange={handleChange}
-                  required
-                  className="mt-1 block w-full rounded-md border-saasha-rose/20 shadow-sm focus:border-saasha-rose focus:ring focus:ring-saasha-rose/20 bg-white dark:bg-dark-secondary dark:border-dark-accent/20 dark:text-dark-text dark:focus:border-dark-accent dark:focus:ring-dark-accent/20"
+                  {...register('name')}
+                  className={`w-full px-4 py-3 rounded-lg border ${errors.name ? 'border-red-500' : 'border-saasha-cream'} focus:outline-none focus:ring-2 focus:ring-saasha-rose/20`}
+                  placeholder="John Doe"
                 />
+                {errors.name && <p className="mt-1 text-sm text-red-500">{errors.name.message}</p>}
               </div>
+
               <div>
-                <label htmlFor="email" className="block text-sm font-medium text-saasha-brown dark:text-dark-text">Email</label>
-                <input 
-                  type="email" 
+                <label htmlFor="email" className="block text-sm font-medium text-saasha-brown dark:text-dark-text">
+                  Email Address
+                </label>
+                <input
+                  type="email"
                   id="email"
                   name="email"
-                  value={formData.email}
-                  onChange={handleChange}
-                  required
-                  className="mt-1 block w-full rounded-md border-saasha-rose/20 shadow-sm focus:border-saasha-rose focus:ring focus:ring-saasha-rose/20 bg-white dark:bg-dark-secondary dark:border-dark-accent/20 dark:text-dark-text dark:focus:border-dark-accent dark:focus:ring-dark-accent/20"
+                  {...register('email')}
+                  className={`w-full px-4 py-3 rounded-lg border ${errors.email ? 'border-red-500' : 'border-saasha-cream'} focus:outline-none focus:ring-2 focus:ring-saasha-rose/20`}
+                  placeholder="john@example.com"
                 />
+                {errors.email && <p className="mt-1 text-sm text-red-500">{errors.email.message}</p>}
               </div>
+
               <div>
-                <label htmlFor="message" className="block text-sm font-medium text-saasha-brown dark:text-dark-text">Message</label>
-                <textarea 
+                <label htmlFor="subject" className="block text-sm font-medium text-saasha-brown dark:text-dark-text">
+                  Subject
+                </label>
+                <input
+                  type="text"
+                  id="subject"
+                  name="subject"
+                  {...register('subject')}
+                  className={`w-full px-4 py-3 rounded-lg border ${errors.subject ? 'border-red-500' : 'border-saasha-cream'} focus:outline-none focus:ring-2 focus:ring-saasha-rose/20`}
+                  placeholder="How can we help?"
+                />
+                {errors.subject && <p className="mt-1 text-sm text-red-500">{errors.subject.message}</p>}
+              </div>
+
+              <div>
+                <label htmlFor="message" className="block text-sm font-medium text-saasha-brown dark:text-dark-text">
+                  Message
+                </label>
+                <textarea
                   id="message"
                   name="message"
-                  value={formData.message}
-                  onChange={handleChange}
-                  required
-                  rows={4} 
-                  className="mt-1 block w-full rounded-md border-saasha-rose/20 shadow-sm focus:border-saasha-rose focus:ring focus:ring-saasha-rose/20 bg-white dark:bg-dark-secondary dark:border-dark-accent/20 dark:text-dark-text dark:focus:border-dark-accent dark:focus:ring-dark-accent/20"
-                ></textarea>
+                  {...register('message')}
+                  rows={4}
+                  className={`w-full px-4 py-3 rounded-lg border ${errors.message ? 'border-red-500' : 'border-saasha-cream'} focus:outline-none focus:ring-2 focus:ring-saasha-rose/20`}
+                  placeholder="Your message here..."
+                />
+                {errors.message && <p className="mt-1 text-sm text-red-500">{errors.message.message}</p>}
               </div>
-              <button 
-                type="submit" 
+
+              <button
+                type="submit"
                 disabled={isSubmitting}
-                className="bg-saasha-brown text-saasha-cream py-2 px-4 rounded-md hover:bg-saasha-rose dark:bg-dark-accent dark:hover:bg-saasha-rose transition-colors duration-300 disabled:opacity-50 disabled:cursor-not-allowed"
+                className="w-full bg-saasha-brown hover:bg-saasha-rose text-saasha-cream py-3 px-6 rounded-lg transition-colors duration-300 flex items-center justify-center space-x-2 disabled:opacity-70"
               >
-                {isSubmitting ? 'Sending...' : 'Send Message'}
+                {isSubmitting ? (
+                  <>
+                    <Loader2 className="w-5 h-5 animate-spin" />
+                    <span>Sending...</span>
+                  </>
+                ) : (
+                  <>
+                    <Send className="w-5 h-5" />
+                    <span>Send Message</span>
+                  </>
+                )}
               </button>
-            </div>
-          </form>
+            </form>
+          </motion.div>
         </div>
       </div>
     </PageLayout>
   );
 };
-
-const ContactCard = ({ icon, title, content }: { icon: React.ReactNode; title: string; content: string }) => (
-  <div className="text-center">
-    <div className="flex justify-center text-saasha-rose dark:text-dark-accent">{icon}</div>
-    <h3 className="mt-4 text-lg font-medium text-saasha-brown dark:text-dark-text">{title}</h3>
-    <p className="mt-2 text-saasha-brown/70 dark:text-dark-text/70">{content}</p>
-  </div>
-);
 
 export default Contact;
