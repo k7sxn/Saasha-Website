@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import { supabase } from '../../lib/supabase';
 import { Database } from '../../types/supabase';
-import { Link } from 'react-router-dom';
+import { Link, useLocation } from 'react-router-dom';
 import PageLayout from '../layout/PageLayout';
 
 type Event = Database['public']['Tables']['events']['Row'];
@@ -9,19 +9,28 @@ type Event = Database['public']['Tables']['events']['Row'];
 const EventsPage = () => {
   const [events, setEvents] = useState<Event[]>([]);
   const [loading, setLoading] = useState(true);
+  const location = useLocation();
 
   useEffect(() => {
     fetchEvents();
-  }, []);
+  }, [location.search]);
 
   const fetchEvents = async () => {
     try {
       setLoading(true);
-      const { data, error } = await supabase
+      let query = supabase
         .from('events')
         .select('*')
         .eq('published', true)
         .order('date', { ascending: true });
+
+      if (location.search.includes('?past')) {
+        query = query.eq('status', 'completed');
+      } else if (location.search.includes('?upcoming')) {
+        query = query.eq('status', 'upcoming');
+      }
+
+      const { data, error } = await query;
 
       if (error) throw error;
       setEvents(data || []);

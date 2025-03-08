@@ -1,5 +1,17 @@
 import React from 'react';
-import { Link } from 'react-router-dom';
+import { Link as RouterLink } from 'react-router-dom';
+
+const ScrollToTopLink = ({ to, children, className }: { to: string; children: React.ReactNode; className?: string }) => {
+  const handleClick = () => {
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  };
+
+  return (
+    <RouterLink to={to} className={className} onClick={handleClick}>
+      {children}
+    </RouterLink>
+  );
+};
 
 const Footer = () => {
   return (
@@ -10,39 +22,39 @@ const Footer = () => {
           <p className="text-lg text-saasha-cream/80 max-w-2xl mx-auto">
             We're here to assist you with any questions, support, or partnership inquiries - reach out to us today.
           </p>
-          <Link 
+          <ScrollToTopLink 
             to="/contact"
             className="mt-8 inline-block bg-saasha-rose hover:bg-saasha-rose/90 dark:bg-dark-accent dark:hover:bg-dark-accent/90 text-saasha-cream px-8 py-3 rounded-full transition-colors duration-300"
           >
             Contact Us
-          </Link>
+          </ScrollToTopLink>
         </div>
 
         <div className="grid grid-cols-2 md:grid-cols-4 gap-8 text-center">
           <div className="space-y-4">
             <h3 className="font-semibold text-xl mb-4">About</h3>
             <ul className="space-y-2">
-              <li><Link to="/about" className="hover:text-saasha-rose dark:hover:text-dark-accent transition-colors duration-300">Our Story</Link></li>
-              <li><Link to="/team" className="hover:text-saasha-rose dark:hover:text-dark-accent transition-colors duration-300">Team</Link></li>
-              <li><Link to="/volunteer" className="hover:text-saasha-rose dark:hover:text-dark-accent transition-colors duration-300">Volunteer</Link></li>
+              <li><ScrollToTopLink to="/about" className="hover:text-saasha-rose dark:hover:text-dark-accent transition-colors duration-300">About Us</ScrollToTopLink></li>
+              <li><ScrollToTopLink to="/team" className="hover:text-saasha-rose dark:hover:text-dark-accent transition-colors duration-300">Team</ScrollToTopLink></li>
+              <li><ScrollToTopLink to="/volunteer" className="hover:text-saasha-rose dark:hover:text-dark-accent transition-colors duration-300">Volunteer</ScrollToTopLink></li>
             </ul>
           </div>
           
           <div className="space-y-4">
             <h3 className="font-semibold text-xl mb-4">Causes</h3>
             <ul className="space-y-2">
-              <li><Link to="/" className="hover:text-saasha-rose dark:hover:text-dark-accent transition-colors duration-300">Education</Link></li>
-              <li><Link to="/" className="hover:text-saasha-rose dark:hover:text-dark-accent transition-colors duration-300">Healthcare</Link></li>
-              <li><Link to="/" className="hover:text-saasha-rose dark:hover:text-dark-accent transition-colors duration-300">Environment</Link></li>
+              <li><ScrollToTopLink to="/" className="hover:text-saasha-rose dark:hover:text-dark-accent transition-colors duration-300">Education</ScrollToTopLink></li>
+              <li><ScrollToTopLink to="/" className="hover:text-saasha-rose dark:hover:text-dark-accent transition-colors duration-300">Healthcare</ScrollToTopLink></li>
+              <li><ScrollToTopLink to="/" className="hover:text-saasha-rose dark:hover:text-dark-accent transition-colors duration-300">Environment</ScrollToTopLink></li>
             </ul>
           </div>
           
           <div className="space-y-4">
             <h3 className="font-semibold text-xl mb-4">Events</h3>
             <ul className="space-y-2">
-              <li><Link to="/events" className="hover:text-saasha-rose dark:hover:text-dark-accent transition-colors duration-300">Upcoming</Link></li>
-              <li><Link to="/events" className="hover:text-saasha-rose dark:hover:text-dark-accent transition-colors duration-300">Past Events</Link></li>
-              <li><Link to="/" className="hover:text-saasha-rose dark:hover:text-dark-accent transition-colors duration-300">Gallery</Link></li>
+              <li><ScrollToTopLink to="/events?upcoming" className="hover:text-saasha-rose dark:hover:text-dark-accent transition-colors duration-300">Upcoming</ScrollToTopLink></li>
+              <li><ScrollToTopLink to="/events?past" className="hover:text-saasha-rose dark:hover:text-dark-accent transition-colors duration-300">Past Events</ScrollToTopLink></li>
+              <li><ScrollToTopLink to="/gallery" className="hover:text-saasha-rose dark:hover:text-dark-accent transition-colors duration-300">Gallery</ScrollToTopLink></li>
             </ul>
           </div>
           
@@ -50,19 +62,19 @@ const Footer = () => {
             <h3 className="font-semibold text-xl mb-4">Resources</h3>
             <ul className="space-y-2">
               <li>
-                <Link to="/blogs" className="hover:text-saasha-rose dark:hover:text-dark-accent transition-colors duration-300">
-                  Blog
-                </Link>
+                <ScrollToTopLink to="/blogs" className="hover:text-saasha-rose dark:hover:text-dark-accent transition-colors duration-300">
+                  Blogs
+                </ScrollToTopLink>
               </li>
               <li>
-                <Link to="/events" className="hover:text-saasha-rose dark:hover:text-dark-accent transition-colors duration-300">
+                <ScrollToTopLink to="/events" className="hover:text-saasha-rose dark:hover:text-dark-accent transition-colors duration-300">
                   Events
-                </Link>
+                </ScrollToTopLink>
               </li>
               <li>
-                <Link to="/faqs" className="hover:text-saasha-rose dark:hover:text-dark-accent transition-colors duration-300">
+                <ScrollToTopLink to="/faqs" className="hover:text-saasha-rose dark:hover:text-dark-accent transition-colors duration-300">
                   FAQs
-                </Link>
+                </ScrollToTopLink>
               </li>
             </ul>
           </div>
