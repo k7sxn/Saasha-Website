@@ -200,7 +200,7 @@ const FAQManager = () => {
               </h2>
               <button
                 onClick={() => setShowForm(true)}
-                className="bg-saasha-brown text-white px-4 py-2 rounded-md hover:bg-saasha-brown/90"
+                className="bg-saasha-rose text-white px-4 py-2 rounded-md hover:bg-saasha-rose/90"
               >
                 Create New FAQ
               </button>
@@ -243,9 +243,23 @@ const FAQManager = () => {
                         </button>
                         <button
                           onClick={() => handleDelete(faq.id!)}
-                          className="text-red-600 hover:text-red-700"
+                          className="text-red-600 hover:text-red-700 mr-4"
                         >
                           Delete
+                        </button>
+                        <button
+                          onClick={() => handleReorder(faq.id!, 'up')}
+                          className="text-gray-600 hover:text-gray-800 mr-2"
+                          disabled={faq.order === 0}
+                        >
+                          ↑
+                        </button>
+                        <button
+                          onClick={() => handleReorder(faq.id!, 'down')}
+                          className="text-gray-600 hover:text-gray-800"
+                          disabled={faq.order === faqs.length - 1}
+                        >
+                          ↓
                         </button>
                       </td>
                     </tr>
