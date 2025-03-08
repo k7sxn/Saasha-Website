@@ -246,63 +246,74 @@ const FAQManager = () => {
         </div>
       </form>
 
-      <div className="bg-white dark:bg-dark-secondary rounded-lg shadow">
+      <div className="bg-dark-secondary rounded-lg shadow">
         <div className="p-6">
-          <h2 className="text-xl font-semibold text-saasha-brown dark:text-dark-text mb-4">
-            Manage FAQs
-          </h2>
-          
+          <div className="flex justify-between items-center mb-4">
+            <h2 className="text-xl font-semibold text-saasha-brown dark:text-dark-text">
+              FAQs
+            </h2>
+            <button
+              onClick={() => {
+                setFormData({ question: '', answer: '', order: 0 });
+                setEditingId(null);
+                window.scrollTo({ top: 0, behavior: 'smooth' });
+              }}
+              className="bg-saasha-brown text-white px-4 py-2 rounded-md hover:bg-saasha-brown/90"
+            >
+              Create New FAQ
+            </button>
+          </div>
+
           {loading ? (
             <div className="flex items-center justify-center min-h-[200px]">
               <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-saasha-rose"></div>
             </div>
           ) : (
-            <div className="space-y-4">
-              {faqs.map((faq, index) => (
-                <div
-                  key={faq.id}
-                  className="flex items-start justify-between p-4 border border-gray-200 dark:border-gray-700 rounded-lg"
-                >
-                  <div className="flex-grow mr-4">
-                    <h3 className="font-medium text-gray-900 dark:text-gray-100">{faq.question}</h3>
-                    <div 
-                      className="mt-1 text-sm text-gray-500 dark:text-gray-400 prose dark:prose-invert"
-                      dangerouslySetInnerHTML={{ __html: faq.answer }}
-                    />
-                  </div>
-                  <div className="flex items-center space-x-2">
-                    {index > 0 && (
+            <table className="min-w-full divide-y divide-gray-200 dark:divide-gray-700">
+              <thead className="bg-gray-50 dark:bg-dark-primary">
+                <tr>
+                  <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">
+                    Question
+                  </th>
+                  <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">
+                    Created
+                  </th>
+                  <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">
+                    Actions
+                  </th>
+                </tr>
+              </thead>
+              <tbody className="bg-white dark:bg-dark-secondary divide-y divide-gray-200 dark:divide-gray-700">
+                {faqs.map((faq) => (
+                  <tr key={faq.id}>
+                    <td className="px-6 py-4 whitespace-nowrap">
+                      <div className="text-sm font-medium text-gray-900 dark:text-gray-100">
+                        {faq.question}
+                      </div>
+                    </td>
+                    <td className="px-6 py-4 whitespace-nowrap">
+                      <div className="text-sm text-gray-500 dark:text-gray-400">
+                        {new Date(faq.created_at).toLocaleDateString()}
+                      </div>
+                    </td>
+                    <td className="px-6 py-4 whitespace-nowrap text-sm font-medium">
                       <button
-                        onClick={() => handleReorder(faq.id!, 'up')}
-                        className="p-1 text-gray-400 hover:text-gray-500"
+                        onClick={() => handleEdit(faq)}
+                        className="text-saasha-rose hover:text-saasha-rose/80 mr-4"
                       >
-                        ↑
+                        Edit
                       </button>
-                    )}
-                    {index < faqs.length - 1 && (
                       <button
-                        onClick={() => handleReorder(faq.id!, 'down')}
-                        className="p-1 text-gray-400 hover:text-gray-500"
+                        onClick={() => handleDelete(faq.id!)}
+                        className="text-red-600 hover:text-red-700"
                       >
-                        ↓
+                        Delete
                       </button>
-                    )}
-                    <button
-                      onClick={() => handleEdit(faq)}
-                      className="p-1 text-saasha-rose hover:text-saasha-rose/80"
-                    >
-                      Edit
-                    </button>
-                    <button
-                      onClick={() => handleDelete(faq.id!)}
-                      className="p-1 text-red-600 hover:text-red-700"
-                    >
-                      Delete
-                    </button>
-                  </div>
-                </div>
-              ))}
-            </div>
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
           )}
         </div>
       </div>
