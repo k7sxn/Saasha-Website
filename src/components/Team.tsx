@@ -7,7 +7,7 @@ const Team = () => {
   const [isAutoPlaying, setIsAutoPlaying] = useState(true);
   const [direction, setDirection] = useState(0);
 
-  const teamMembers = [
+   const teamMembers = [
     { id: 1, name: 'Sanya', role: 'Co-Founder', imageUrl: 'https://drive.google.com/uc?export=view&id=1cKOWiuaAgJT4BEr2Yog2eOaqpeZJtrP1' },
     { id: 2, name: 'Tanisha', role: 'Co-Founder', imageUrl: 'https://drive.google.com/uc?export=view&id=1TeKVHE30kbMU8bAaV-rbB5ZVgWb3sx4e' },
     { id: 3, name: 'Aarya', role: 'Social Media Manager', imageUrl: 'https://drive.google.com/uc?export=view&id=1MKxdycUgLc-Y_DqF5epXqxi3HSVaWF4e' },
@@ -18,8 +18,8 @@ const Team = () => {
     { id: 8, name: 'Yessa', role: 'Content Writer', imageUrl: 'https://drive.google.com/uc?export=view&id=1err3ds2TWC8rKi0FJNsn184rwoDkxyGK' },
     { id: 9, name: 'Prishita', role: 'Content Writer', imageUrl: 'https://drive.google.com/uc?export=view&id=15e3rz0O0AFIBvkZ-fpR9nGUGxZuFfIOn' },
     { id: 10, name: 'Nihar', role: 'Event Manager', imageUrl: 'https://drive.google.com/uc?export=view&id=16nV9TJr7eq5WcYx2AvuGrRw5ZgNCfIP6' },
-    { id: 11, name: 'Ryan Lee', role: 'Photographer', imageUrl: 'https://drive.google.com/uc?export=view&id=1zJ5XH3JBA9jGYi4DcXDvsYeVTgoZ5GkG' },
-    { id: 12, name: 'Sophie Taylor', role: 'Head of Content Creation', imageUrl: 'https://drive.google.com/uc?export=view&id=1Ngf6nJoODUztS0xlU6pY7FucTc37XCrf' }
+    { id: 11, name: 'Meira', role: 'Photographer', imageUrl: 'https://drive.google.com/uc?export=view&id=1zJ5XH3JBA9jGYi4DcXDvsYeVTgoZ5GkG' },
+    { id: 12, name: 'Anushka', role: 'Head of Content Creation', imageUrl: 'https://drive.google.com/uc?export=view&id=1Ngf6nJoODUztS0xlU6pY7FucTc37XCrf' }
   ];
 
   const itemsPerPage = {
