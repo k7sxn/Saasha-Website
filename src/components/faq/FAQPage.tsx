@@ -29,35 +29,36 @@ const FAQPage = () => {
 
   return (
     <PageLayout>
-      <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
+      <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
         <div className="text-center mb-12">
-            <h1 className="text-4xl font-bold text-saasha-brown dark:text-dark-text mb-4">
+          <h1 className="text-4xl font-bold text-saasha-brown dark:text-dark-text mb-4">
             Frequently Asked Questions
-            </h1>
-            <p className="text-lg text-gray-600 dark:text-gray-300">
-              Get answers to your questions about your existence
-            </p>
-          </div>
+          </h1>
+          <p className="text-lg text-gray-600 dark:text-gray-300">
+            Get answers to your questions about your existence
+          </p>
+        </div>
         
         {loading ? (
           <div className="flex items-center justify-center min-h-[400px]">
             <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-saasha-rose"></div>
           </div>
         ) : (
-          <div className="space-y-6">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             {faqs.map((faq) => (
               <div
                 key={faq.id}
                 className="bg-white dark:bg-dark-secondary rounded-lg shadow-sm p-6"
               >
                 <h3 className="text-xl font-semibold text-saasha-brown dark:text-dark-text mb-3">
-                  {faq.question}
+                  <strong>Q.</strong> {faq.question}
                 </h3>
                 <div 
                   className="prose prose-lg dark:prose-invert max-w-none
                     prose-p:text-base prose-p:text-gray-700 dark:prose-p:text-gray-300"
-                  dangerouslySetInnerHTML={{ __html: faq.answer }}
-                />
+                >
+                  <strong>A.</strong> <span dangerouslySetInnerHTML={{ __html: faq.answer }} />
+                </div>
               </div>
             ))}
           </div>
