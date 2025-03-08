@@ -11,6 +11,7 @@ const FAQManager = () => {
   const [faqs, setFaqs] = useState<FAQ[]>([]);
   const [loading, setLoading] = useState(true);
   const [editingId, setEditingId] = useState<number | null>(null);
+  const [showForm, setShowForm] = useState(false);
   const [formData, setFormData] = useState<FAQInsert>({
     question: '',
     answer: '',
@@ -59,7 +60,6 @@ const FAQManager = () => {
 
     try {
       if (editingId) {
-        // Only send the fields that can be updated
         const updateData: FAQUpdate = {
           question: formData.question,
           answer: formData.answer,
@@ -91,9 +91,9 @@ const FAQManager = () => {
         showNotification('FAQ published successfully', 'success');
       }
 
-      // Reset form and scroll to top
       setFormData({ question: '', answer: '', order: 0 });
       setEditingId(null);
+      setShowForm(false);
       window.scrollTo({ top: 0, behavior: 'smooth' });
       await fetchFAQs();
     } catch (error) {
@@ -115,6 +115,7 @@ const FAQManager = () => {
     };
     setFormData(editData);
     setEditingId(faq.id);
+    setShowForm(true);
     window.scrollTo({ top: 0, behavior: 'smooth' });
   };
 
@@ -148,10 +149,8 @@ const FAQManager = () => {
     try {
       setLoading(true);
       
-      // Get the FAQ we're swapping with
       const otherFaq = faqs[newIndex];
       
-      // Update both FAQs with their new orders
       const updates = [
         supabase
           .from('faqs')
@@ -192,131 +191,126 @@ const FAQManager = () => {
         </div>
       )}
 
-      <form onSubmit={handleSubmit} className="bg-white dark:bg-dark-secondary rounded-lg shadow p-6">
-        <h2 className="text-xl font-semibold text-saasha-brown dark:text-dark-text mb-4">
-          {editingId ? 'Edit FAQ' : 'Add New FAQ'}
-        </h2>
-        
-        <div className="space-y-4">
-          <div>
-            <label htmlFor="question" className="block text-sm font-medium text-gray-700 dark:text-gray-300">
-              Question
-            </label>
-            <input
-              type="text"
-              id="question"
-              value={formData.question}
-              onChange={(e) => setFormData(prev => ({ ...prev, question: e.target.value }))}
-              className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-saasha-rose focus:ring-saasha-rose dark:bg-dark-primary dark:border-gray-600 dark:text-white"
-              required
-            />
-          </div>
-
-          <div>
-            <label htmlFor="answer" className="block text-sm font-medium text-gray-700 dark:text-gray-300">
-              Answer
-            </label>
-            <RichTextEditor
-              value={formData.answer}
-              onChange={(value) => setFormData(prev => ({ ...prev, answer: value }))}
-            />
-          </div>
-
-          <div className="flex justify-end space-x-3">
-            {editingId && (
+      {!showForm ? (
+        <div className="bg-white dark:bg-dark-secondary rounded-lg shadow">
+          <div className="p-6">
+            <div className="flex justify-between items-center mb-4">
+              <h2 className="text-xl font-semibold text-saasha-brown dark:text-dark-text">
+                FAQs
+              </h2>
               <button
-                type="button"
-                onClick={() => {
-                  setFormData({ question: '', answer: '', order: 0 });
-                  setEditingId(null);
-                }}
-                className="px-4 py-2 border border-gray-300 rounded-md shadow-sm text-sm font-medium text-gray-700 bg-white hover:bg-gray-50 dark:bg-dark-primary dark:text-gray-300 dark:border-gray-600 dark:hover:bg-dark-primary/90"
+                onClick={() => setShowForm(true)}
+                className="bg-saasha-brown text-white px-4 py-2 rounded-md hover:bg-saasha-brown/90"
               >
-                Cancel
+                Create New FAQ
               </button>
-            )}
-            <button
-              type="submit"
-              disabled={loading}
-              className="px-4 py-2 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-saasha-brown hover:bg-saasha-brown/90 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-saasha-brown disabled:opacity-50"
-            >
-              {loading ? 'Saving...' : editingId ? 'Update FAQ' : 'Add FAQ'}
-            </button>
-          </div>
-        </div>
-      </form>
-
-      <div className="bg-dark-secondary rounded-lg shadow">
-        <div className="p-6">
-          <div className="flex justify-between items-center mb-4">
-            <h2 className="text-xl font-semibold text-saasha-brown dark:text-dark-text">
-              FAQs
-            </h2>
-            <button
-              onClick={() => {
-                setFormData({ question: '', answer: '', order: 0 });
-                setEditingId(null);
-                window.scrollTo({ top: 0, behavior: 'smooth' });
-              }}
-              className="bg-saasha-brown text-white px-4 py-2 rounded-md hover:bg-saasha-brown/90"
-            >
-              Create New FAQ
-            </button>
-          </div>
-
-          {loading ? (
-            <div className="flex items-center justify-center min-h-[200px]">
-              <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-saasha-rose"></div>
             </div>
-          ) : (
-            <table className="min-w-full divide-y divide-gray-200 dark:divide-gray-700">
-              <thead className="bg-gray-50 dark:bg-dark-primary">
-                <tr>
-                  <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">
-                    Question
-                  </th>
-                  <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">
-                    Created
-                  </th>
-                  <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">
-                    Actions
-                  </th>
-                </tr>
-              </thead>
-              <tbody className="bg-white dark:bg-dark-secondary divide-y divide-gray-200 dark:divide-gray-700">
-                {faqs.map((faq) => (
-                  <tr key={faq.id}>
-                    <td className="px-6 py-4 whitespace-nowrap">
-                      <div className="text-sm font-medium text-gray-900 dark:text-gray-100">
-                        {faq.question}
-                      </div>
-                    </td>
-                    <td className="px-6 py-4 whitespace-nowrap">
-                      <div className="text-sm text-gray-500 dark:text-gray-400">
-                        {new Date(faq.created_at).toLocaleDateString()}
-                      </div>
-                    </td>
-                    <td className="px-6 py-4 whitespace-nowrap text-sm font-medium">
-                      <button
-                        onClick={() => handleEdit(faq)}
-                        className="text-saasha-rose hover:text-saasha-rose/80 mr-4"
-                      >
-                        Edit
-                      </button>
-                      <button
-                        onClick={() => handleDelete(faq.id!)}
-                        className="text-red-600 hover:text-red-700"
-                      >
-                        Delete
-                      </button>
-                    </td>
+            
+            {loading ? (
+              <div className="flex items-center justify-center min-h-[200px]">
+                <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-saasha-rose"></div>
+              </div>
+            ) : (
+              <table className="min-w-full divide-y divide-gray-200 dark:divide-gray-700">
+                <thead className="bg-gray-50 dark:bg-gray-800">
+                  <tr>
+                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">
+                      Question
+                    </th>
+                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">
+                      Order
+                    </th>
+                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">
+                      Actions
+                    </th>
                   </tr>
-                ))}
-              </tbody>
-            </table>
-          )}
+                </thead>
+                <tbody className="bg-white dark:bg-dark-secondary divide-y divide-gray-200 dark:divide-gray-700">
+                  {faqs.map((faq) => (
+                    <tr key={faq.id}>
+                      <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900 dark:text-gray-100">
+                        {faq.question}
+                      </td>
+                      <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500 dark:text-gray-400">
+                        {faq.order}
+                      </td>
+                      <td className="px-6 py-4 whitespace-nowrap text-sm font-medium">
+                        <button
+                          onClick={() => handleEdit(faq)}
+                          className="text-saasha-rose hover:text-saasha-rose/80 mr-4"
+                        >
+                          Edit
+                        </button>
+                        <button
+                          onClick={() => handleDelete(faq.id!)}
+                          className="text-red-600 hover:text-red-700"
+                        >
+                          Delete
+                        </button>
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            )}
+          </div>
         </div>
-      </div>
+      ) : (
+        <form onSubmit={handleSubmit} className="bg-white dark:bg-dark-secondary rounded-lg shadow p-6">
+          <h2 className="text-xl font-semibold text-saasha-brown dark:text-dark-text mb-4">
+            {editingId ? 'Edit FAQ' : 'Add New FAQ'}
+          </h2>
+          
+          <div className="space-y-4">
+            <div>
+              <label htmlFor="question" className="block text-sm font-medium text-gray-700 dark:text-gray-300">
+                Question
+              </label>
+              <input
+                type="text"
+                id="question"
+                value={formData.question}
+                onChange={(e) => setFormData(prev => ({ ...prev, question: e.target.value }))}
+                className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-saasha-rose focus:ring-saasha-rose dark:bg-dark-primary dark:border-gray-600 dark:text-white"
+                required
+              />
+            </div>
+
+            <div>
+              <label htmlFor="answer" className="block text-sm font-medium text-gray-700 dark:text-gray-300">
+                Answer
+              </label>
+              <RichTextEditor
+                value={formData.answer}
+                onChange={(value) => setFormData(prev => ({ ...prev, answer: value }))}
+              />
+            </div>
+
+            <div className="flex justify-end space-x-3">
+              {editingId && (
+                <button
+                  type="button"
+                  onClick={() => {
+                    setFormData({ question: '', answer: '', order: 0 });
+                    setEditingId(null);
+                    setShowForm(false);
+                  }}
+                  className="px-4 py-2 border border-gray-300 rounded-md shadow-sm text-sm font-medium text-gray-700 bg-white hover:bg-gray-50 dark:bg-dark-primary dark:text-gray-300 dark:border-gray-600 dark:hover:bg-dark-primary/90"
+                >
+                  Cancel
+                </button>
+              )}
+              <button
+                type="submit"
+                disabled={loading}
+                className="px-4 py-2 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-saasha-brown hover:bg-saasha-brown/90 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-saasha-brown disabled:opacity-50"
+              >
+                {loading ? 'Saving...' : editingId ? 'Update FAQ' : 'Add FAQ'}
+              </button>
+            </div>
+          </div>
+        </form>
+      )}
     </div>
   );
 };
