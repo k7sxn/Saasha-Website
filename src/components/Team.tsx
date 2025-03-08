@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { ChevronLeft, ChevronRight } from 'lucide-react';
 import { motion } from 'framer-motion';
-import PageLayout from '../layout/PageLayout';
+import PageLayout from '../components/layout/PageLayout';
 
 const Team = () => {
   const [currentIndex, setCurrentIndex] = useState(0);
