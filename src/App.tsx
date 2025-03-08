@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { BrowserRouter as Router, Routes, Route, useLocation, Navigate } from 'react-router-dom';
 import { DarkModeProvider } from './context/DarkModeContext';
 import { AuthProvider, useAuth } from './context/AuthContext';
+import { FaInstagram } from 'react-icons/fa'; // Import Instagram icon
 import Navbar from './components/Navbar';
 import Hero from './components/Hero';
 import About from './components/About';
@@ -38,16 +39,11 @@ const MainApp = () => {
   const [hasAccess, setHasAccess] = useState(false);
 
   useEffect(() => {
-    // Check if user already has access
     const storedAccess = localStorage.getItem('hasAccess');
-    
-    // If ?admin is in URL, grant access
     if (location.search.includes('?admin')) {
       localStorage.setItem('hasAccess', 'true');
       setHasAccess(true);
-    } 
-    // If access was previously granted, maintain it
-    else if (storedAccess === 'true') {
+    } else if (storedAccess === 'true') {
       setHasAccess(true);
     }
   }, [location.search]);
@@ -59,14 +55,18 @@ const MainApp = () => {
   return (
     <div className="min-h-screen bg-saasha-cream dark:bg-dark-primary dark:text-dark-text transition-colors duration-200">
       <Navbar />
+      <div className="absolute top-4 right-4">
+        <a 
+          href="https://www.instagram.com/yourusername/" 
+          target="_blank" 
+          rel="noopener noreferrer"
+          className="text-pink-500 hover:text-pink-700 text-2xl"
+        >
+          <FaInstagram />
+        </a>
+      </div>
       <Routes>
-        <Route path="/" element={
-          <>
-            <Hero />
-            <About />
-            <WhySupport />
-          </>
-        } />
+        <Route path="/" element={<><Hero /><About /><WhySupport /></>} />
         <Route path="/about" element={<About />} />
         <Route path="/team" element={<Team />} />
         <Route path="/contact" element={<Contact />} />
@@ -80,16 +80,19 @@ const MainApp = () => {
         <Route path="/blog/:slug" element={<BlogPost />} />
         <Route path="/faqs" element={<FAQPage />} />
         <Route path="/admin" element={<AdminLogin />} />
-        <Route
-          path="/admin/dashboard"
-          element={
-            <ProtectedRoute>
-              <AdminDashboard />
-            </ProtectedRoute>
-          }
-        />
+        <Route path="/admin/dashboard" element={<ProtectedRoute><AdminDashboard /></ProtectedRoute>} />
       </Routes>
       <Footer />
+      <div className="text-center py-4">
+        <a 
+          href="https://www.instagram.com/yourusername/" 
+          target="_blank" 
+          rel="noopener noreferrer"
+          className="text-pink-500 hover:text-pink-700 text-lg"
+        >
+          Follow us on Instagram
+        </a>
+      </div>
       <DarkModeToggle />
     </div>
   );
