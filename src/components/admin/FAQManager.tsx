@@ -249,14 +249,14 @@ const FAQManager = () => {
                         </button>
                         <button
                           onClick={() => handleReorder(faq.id!, 'up')}
-                          className="text-gray-600 hover:text-gray-800 mr-2"
+                          className="text-blue-600 hover:text-blue-800 dark:text-blue-400 dark:hover:text-blue-600 mr-2"
                           disabled={faq.order === 0}
                         >
                           ↑
                         </button>
                         <button
                           onClick={() => handleReorder(faq.id!, 'down')}
-                          className="text-gray-600 hover:text-gray-800"
+                          className="text-blue-600 hover:text-blue-800 dark:text-blue-400 dark:hover:text-blue-600"
                           disabled={faq.order === faqs.length - 1}
                         >
                           ↓
